@@ -30,9 +30,9 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-sm transition hover:bg-slate-50 dark:border-slate-500 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
-      aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
+      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
-      {isDark ? "☀️ 浅色" : "🌙 深色"}
+      {isDark ? "☀️ Light" : "🌙 Dark"}
     </button>
   );
 }

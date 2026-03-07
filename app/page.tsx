@@ -9,6 +9,15 @@ export default function HomePage() {
         </p>
       </section>
 
+      <section className="mt-8 text-center">
+        <h2 className="text-base font-bold text-slate-900 dark:text-white md:text-lg">How to play Guess The Game game?</h2>
+        <ol className="mx-auto mt-4 max-w-2xl list-decimal space-y-3 pl-6 text-left text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+          <li>Start with the first image clue. You?ll see one screenshot or artwork from today?s video game, often blurred or cropped to make it tricky.</li>
+          <li>Type the game title (or a well-known abbreviation) in the input and submit. Each wrong guess reveals the next image; clues go from hardest to clearest across up to 6 images.</li>
+          <li>Use all 6 guesses if you need to. Once you enter the correct game name (matching our list), you win. Answers are not case-sensitive.</li>
+        </ol>
+      </section>
+
       <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <a
           href="/game"

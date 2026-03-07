@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import FAQSection from "@/components/FAQSection";
+import AboutSection from "@/components/AboutSection";
 
 export const metadata: Metadata = {
   title: "GuessTheGame",
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </header>
           {children}
           <FAQSection />
+          <AboutSection />
           <footer className="mt-12 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] border-t border-slate-200 bg-slate-200/60 py-8 dark:border-slate-600 dark:bg-slate-900/90">
             <div className="mx-auto flex flex-col items-center justify-center gap-3 text-center text-sm">
               <span className="text-slate-800 dark:text-slate-200">© {new Date().getFullYear()} GuessTheGame.com</span>

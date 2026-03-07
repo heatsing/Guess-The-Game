@@ -3,6 +3,7 @@ import GameBoard from "@/components/GameBoard";
 import PlayerStatistics from "@/components/PlayerStatistics";
 import { MODES } from "@/lib/modes";
 import { GAME_RULES } from "@/lib/gameRules";
+import { HOW_TO_PLAY } from "@/lib/howToPlay";
 
 type Props = {
   modeKey: string;
@@ -95,38 +96,16 @@ export default function ModePage({ modeKey, modeLabel, description, daily }: Pro
             </div>
           </section>
 
-          {/* TIPS */}
-          <section className="mb-20 md:mb-28">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200">TIPS</h2>
-            <ul className="mt-8 max-w-2xl list-disc space-y-3 pl-5 text-base text-slate-700 md:text-lg dark:text-slate-200">
-              <li>Try different spellings, spacing, and common abbreviations.</li>
-              <li>Focus on colors, UI elements, icons, and distinctive silhouettes.</li>
-              <li>If you’re stuck, take one guess to unlock the next clue quickly.</li>
-            </ul>
-          </section>
-
-          {/* FAQ */}
-          <section>
-            <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200">FAQ</h2>
-            <div className="mt-8 grid gap-4 md:max-w-3xl">
-              <details className="rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm open:shadow-md dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200">
-                <summary className="cursor-pointer text-base font-semibold md:text-lg">Why didn’t my answer get accepted?</summary>
-                <p className="mt-3 text-sm text-slate-700 md:text-base dark:text-slate-200">
-                  Answers are normalized (case/spacing/punctuation). If it still doesn’t match, add it to{" "}
-                  <code className="rounded bg-slate-100 px-1.5 py-0.5 dark:bg-slate-700 dark:text-slate-200">acceptableAnswers</code> in the corresponding data file.
-                </p>
-              </details>
-              <details className="rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm open:shadow-md dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200">
-                <summary className="cursor-pointer text-base font-semibold md:text-lg">Do my stats sync across devices?</summary>
-                <p className="mt-3 text-sm text-slate-700 md:text-base dark:text-slate-200">Not yet. Statistics are stored in your browser on this device.</p>
-              </details>
-              <details className="rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm open:shadow-md dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200">
-                <summary className="cursor-pointer text-base font-semibold md:text-lg">How does the daily puzzle rotate?</summary>
-                <p className="mt-3 text-sm text-slate-700 md:text-base dark:text-slate-200">
-                  The game picks an entry based on the current date (UTC) and cycles through your list.
-                </p>
-              </details>
-            </div>
+          {/* HOW TO PLAY */}
+          <section className="mb-20 md:mb-28 text-center">
+            <h2 className="text-base font-bold text-slate-900 dark:text-white md:text-lg">
+              {(HOW_TO_PLAY[modeKey] ?? HOW_TO_PLAY.game).title}
+            </h2>
+            <ol className="mx-auto mt-6 max-w-2xl list-decimal space-y-4 pl-6 text-left text-sm leading-relaxed text-slate-700 dark:text-slate-200 md:text-base">
+              {((HOW_TO_PLAY[modeKey] ?? HOW_TO_PLAY.game).steps as string[]).map((step, i) => (
+                <li key={i}>{step}</li>
+              ))}
+            </ol>
           </section>
         </div>
       </div>

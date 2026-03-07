@@ -1,81 +1,94 @@
-import Link from "next/link";
+"use client";
 
-const FAQ_ITEMS = [
+import { usePathname } from "next/navigation";
+import { GAME_RULES } from "@/lib/gameRules";
+import { MODES } from "@/lib/modes";
+
+const PATH_TO_MODE: Record<string, string> = {
+  "/": "game",
+  "/game": "game",
+  "/book": "book",
+  "/movie": "movie",
+  "/logo": "logo",
+  "/house": "house",
+  "/angle": "angle",
+  "/phrase": "phrase",
+  "/song": "song",
+  "/animal": "animal",
+  "/plant": "plant",
+  "/number": "number",
+  "/price": "price",
+  "/faq": "game",
+};
+
+const GENERIC_FAQS = [
   {
     question: "Why is my answer not accepted?",
     answer:
-      "We maintain a curated list of acceptable answers for each game. If your guess is not accepted, it may not match our database (e.g. spelling, alternate titles, or regional names). If you think we should add an answer, please email us: guessthegameemail@gmail.com",
+      "We maintain a curated list of acceptable answers for each game. If your guess is not accepted, it may not match our database (e.g. spelling, alternate titles, or regional names). This means it will not be counted as correct and you will not be able to complete the game with it. If you think we should add this answer, please email us: guessthegameemail@gmail.com",
   },
   {
     question: "Where can I see the answers to the game?",
     answer:
       "Answers to today's game you can find only the next day after 12 am. To do this, you need to click on the Yesterday's button. There you will see the answer to the previous game, as well as your guesses in bold.",
   },
-  {
-    question: "Do my stats sync across devices?",
-    answer: "Not yet. Statistics are stored in your browser on this device.",
-  },
 ];
 
-export default function FAQSection({ compact = false }: { compact?: boolean }) {
-  if (compact) {
-    return (
-      <section className="mt-8 rounded-2xl border border-line bg-card p-6 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
-          Frequently Asked Questions
-        </h2>
-        <p className="mt-2 text-sm text-slate-800 dark:text-slate-200">
-          Find answers to common questions about the game.
-        </p>
-        <Link
-          href="/faq"
-          className="mt-4 inline-block rounded-xl bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 dark:hover:bg-blue-600"
-        >
-          View all FAQs
-        </Link>
-      </section>
-    );
-  }
+function FaqCard({
+  question,
+  answer,
+}: {
+  question: string;
+  answer: string;
+}) {
+  const hasEmail = answer.includes("guessthegameemail@gmail.com");
+  return (
+    <article className="rounded-xl border border-slate-200 bg-slate-100/80 px-6 py-5 shadow-sm dark:border-slate-600 dark:bg-slate-700/50">
+      <h3 className="text-base font-bold text-slate-900 dark:text-white">
+        {question}
+      </h3>
+      <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+        {hasEmail ? (
+          <>
+            {answer.split("guessthegameemail@gmail.com")[0]}
+            <a
+              href="mailto:guessthegameemail@gmail.com"
+              className="text-blue-600 hover:underline dark:text-blue-400"
+            >
+              guessthegameemail@gmail.com
+            </a>
+            {answer.split("guessthegameemail@gmail.com")[1]}
+          </>
+        ) : (
+          answer
+        )}
+      </p>
+    </article>
+  );
+}
+
+export default function FAQSection() {
+  const pathname = usePathname();
+  const modeKey = PATH_TO_MODE[pathname] ?? "game";
+  const mode = MODES.find((m) => m.key === modeKey);
+  const label = mode?.label ?? "Guess The Game";
+  const gameRulesText = GAME_RULES[modeKey] ?? GAME_RULES.game;
+
+  const faqItems = [
+    { question: `GAME RULES (${label.toUpperCase()})`, answer: gameRulesText },
+    ...GENERIC_FAQS,
+  ];
 
   return (
-    <section className="mt-8 rounded-2xl border border-line bg-card p-6 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-      <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
+    <section className="mt-10">
+      <h2 className="mb-6 text-center text-xl font-bold text-slate-900 dark:text-white">
         Frequently Asked Questions
       </h2>
-      <div className="mt-6 space-y-4">
-        {FAQ_ITEMS.map((faq, i) => (
-          <details
-            key={i}
-            className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm open:shadow-md dark:border-slate-600 dark:bg-slate-700/50"
-          >
-            <summary className="cursor-pointer text-sm font-semibold text-slate-900 dark:text-white">
-              {faq.question}
-            </summary>
-            <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
-              {faq.answer.includes("guessthegameemail@gmail.com") ? (
-                <>
-                  {faq.answer.split("guessthegameemail@gmail.com")[0]}
-                  <a
-                    href="mailto:guessthegameemail@gmail.com"
-                    className="text-blue-600 hover:underline dark:text-blue-400"
-                  >
-                    guessthegameemail@gmail.com
-                  </a>
-                  {faq.answer.split("guessthegameemail@gmail.com")[1]}
-                </>
-              ) : (
-                faq.answer
-              )}
-            </p>
-          </details>
+      <div className="mx-auto max-w-2xl space-y-6">
+        {faqItems.map((faq, i) => (
+          <FaqCard key={i} question={faq.question} answer={faq.answer} />
         ))}
       </div>
-      <Link
-        href="/faq"
-        className="mt-4 inline-block text-sm font-medium text-brand hover:underline dark:text-blue-400"
-      >
-        More FAQs →
-      </Link>
     </section>
   );
 }
