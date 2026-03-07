@@ -1,0 +1,17 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/angle/page": "/angle",
+  "/animal/page": "/animal",
+  "/book/page": "/book",
+  "/game/page": "/game",
+  "/house/page": "/house",
+  "/logo/page": "/logo",
+  "/movie/page": "/movie",
+  "/number/page": "/number",
+  "/page": "/",
+  "/phrase/page": "/phrase",
+  "/plant/page": "/plant",
+  "/price/page": "/price",
+  "/song/page": "/song"
+}

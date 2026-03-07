@@ -1,0 +1,16 @@
+[
+  {
+    "id": "animal-demo-1",
+    "title": "Demo Animal",
+    "acceptableAnswers": ["demo animal"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

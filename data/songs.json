@@ -1,0 +1,16 @@
+[
+  {
+    "id": "song-demo-1",
+    "title": "Demo Song",
+    "acceptableAnswers": ["demo song"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

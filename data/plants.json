@@ -1,0 +1,16 @@
+[
+  {
+    "id": "plant-demo-1",
+    "title": "Demo Plant",
+    "acceptableAnswers": ["demo plant"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

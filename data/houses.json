@@ -1,0 +1,16 @@
+[
+  {
+    "id": "house-demo-1",
+    "title": "Demo House",
+    "acceptableAnswers": ["demo house"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

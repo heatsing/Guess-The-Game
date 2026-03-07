@@ -1,0 +1,16 @@
+[
+  {
+    "id": "price-demo-1",
+    "title": "199",
+    "acceptableAnswers": ["199", "$199", "199usd", "199 dollars", "199$"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

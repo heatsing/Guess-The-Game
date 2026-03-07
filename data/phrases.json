@@ -1,0 +1,16 @@
+[
+  {
+    "id": "phrase-demo-1",
+    "title": "Demo Phrase",
+    "acceptableAnswers": ["demo phrase"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "book-demo-1",
+    "title": "Demo Book",
+    "acceptableAnswers": ["demo book"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "movie-demo-1",
+    "title": "Demo Movie",
+    "acceptableAnswers": ["demo movie"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

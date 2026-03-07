@@ -1,0 +1,16 @@
+[
+  {
+    "id": "number-demo-1",
+    "title": "Demo Number",
+    "acceptableAnswers": ["42", "forty two", "forty-two"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

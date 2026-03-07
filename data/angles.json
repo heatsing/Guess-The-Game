@@ -1,0 +1,16 @@
+[
+  {
+    "id": "angle-demo-1",
+    "title": "Demo Angle",
+    "acceptableAnswers": ["demo angle"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

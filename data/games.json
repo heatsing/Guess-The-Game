@@ -1,0 +1,42 @@
+[
+  {
+    "id": "demo-1",
+    "title": "Hollow Knight",
+    "acceptableAnswers": ["hollowknight", "空洞骑士"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  },
+  {
+    "id": "demo-2",
+    "title": "Celeste",
+    "acceptableAnswers": ["celeste", "蔚蓝"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  },
+  {
+    "id": "demo-3",
+    "title": "Portal 2",
+    "acceptableAnswers": ["portal2", "portal 2", "传送门2", "传送门 2"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

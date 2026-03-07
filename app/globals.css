@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  color: #0f172a;
+  background: #ffffff;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+html.dark body {
+  color: #f8fafc;
+  background: #1a1a1a;
+}
+
+::selection {
+  background: rgba(37, 99, 235, 0.18);
+}
+

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "logo-demo-1",
+    "title": "Demo Logo",
+    "acceptableAnswers": ["demo logo"],
+    "images": [
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg",
+      "/images/placeholder.svg"
+    ]
+  }
+]
+

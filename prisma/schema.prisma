@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Game {
+  id                String       @id @default(cuid())
+  slug              String       @unique
+  title             String
+  acceptableAnswers String       @default("[]") // JSON 字符串，代码里解析
+  images            GameImage[]
+  createdAt         DateTime     @default(now())
+}
+
+model GameImage {
+  id      String @id @default(cuid())
+  game    Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId  String
+  order   Int
+  url     String
+
+  @@unique([gameId, order])
+  @@index([gameId])
+}
+
