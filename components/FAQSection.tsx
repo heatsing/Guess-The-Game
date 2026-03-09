@@ -80,7 +80,7 @@ export default function FAQSection() {
   ];
 
   return (
-    <section className="mt-10">
+    <section id="faq" className="mt-10">
       <h2 className="mb-6 text-center text-xl font-bold text-slate-900 dark:text-white">
         Frequently Asked Questions
       </h2>

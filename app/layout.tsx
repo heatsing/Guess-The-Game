@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import "./globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import FAQSection from "@/components/FAQSection";
@@ -20,13 +21,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-dvh antialiased">
-        <div className="mx-auto max-w-3xl px-4 py-6">
-          <header className="mb-6 flex items-center justify-between gap-3">
-            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-300">HEADER</div>
-            <div className="flex-1 pl-2">
-              <div className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">GuessTheGame</div>
-              <div className="text-sm text-slate-800 dark:text-slate-200">A daily video game guessing challenge.</div>
-            </div>
+        <div className="sticky top-0 z-40 w-screen border-b border-yellow-500 bg-[#facc15] text-slate-900">
+          <div className="mx-auto flex h-8 max-w-6xl items-center justify-center gap-3 px-3 text-xs font-semibold md:gap-5">
+            <a href="/game" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">🎯 Daily ▾</a>
+            <a href="/game" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">📅</a>
+            <a href="/price" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">💰</a>
+            <a href="/game" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">🏆</a>
+            <a href="/game" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">📊</a>
+            <a href="#faq" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">❓</a>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-6xl px-4 py-6">
+          <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
+            <a href="/" className="flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt="Guess The Game logo"
+                width={88}
+                height={88}
+                className="h-14 w-14 object-contain md:h-16 md:w-16"
+                priority
+              />
+              <div>
+                <div className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">GuessTheGame</div>
+                <div className="text-sm text-slate-800 dark:text-slate-200">Play daily visual guessing challenges.</div>
+              </div>
+            </a>
             <nav className="flex items-center gap-2">
               <ThemeToggle />
               <a
