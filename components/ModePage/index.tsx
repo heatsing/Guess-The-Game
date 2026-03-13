@@ -2,9 +2,11 @@ import type { DailyGame } from "@/lib/gameTypes";
 import GameBoard from "@/components/GameBoard";
 import PlayerStatistics from "@/components/PlayerStatistics";
 import CalendarDateCard from "@/components/CalendarDateCard";
+import NextGameCountdown from "@/components/NextGameCountdown";
 import { MODES } from "@/lib/modes";
 import { GAME_RULES } from "@/lib/gameRules";
 import { HOW_TO_PLAY } from "@/lib/howToPlay";
+import { getTitlesForMode } from "@/lib/getDailyForMode";
 
 type Props = {
   modeKey: string;
@@ -18,6 +20,8 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 export default function ModePage({ modeKey, modeLabel, description, daily }: Props) {
+  const titles = getTitlesForMode(modeKey);
+
   return (
     <main className="grid gap-4">
       {/* HERO */}
@@ -38,7 +42,7 @@ export default function ModePage({ modeKey, modeLabel, description, daily }: Pro
       {/* GAME BOARD */}
       <section className="rounded-2xl border border-line bg-card p-4 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
         <div className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">GAME BOARD</div>
-        <GameBoard game={daily} modeLabel={modeLabel} storageNamespace={modeKey} />
+        <GameBoard game={daily} modeLabel={modeLabel} storageNamespace={modeKey} titles={titles} />
       </section>
 
       {/* HOW TO PLAY */}
@@ -55,7 +59,7 @@ export default function ModePage({ modeKey, modeLabel, description, daily }: Pro
       {/* DAILY CHALLENGE */}
       <section className="rounded-2xl border border-line bg-card p-6 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
         <SectionTitle>DAILY CHALLENGE</SectionTitle>
-        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        <div className="mt-3 grid gap-3 sm:grid-cols-4">
           <CalendarDateCard puzzleKey={daily.puzzleKey} />
           <div className="rounded-xl border border-line bg-white px-4 py-3 dark:border-slate-600 dark:bg-slate-700/50">
             <div className="text-xs text-slate-700 dark:text-slate-200">Max guesses</div>
@@ -65,6 +69,7 @@ export default function ModePage({ modeKey, modeLabel, description, daily }: Pro
             <div className="text-xs text-slate-700 dark:text-slate-200">Clues</div>
             <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{Math.max(1, daily.images.length || 6)}</div>
           </div>
+          <NextGameCountdown />
         </div>
       </section>
 

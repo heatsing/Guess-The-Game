@@ -44,3 +44,9 @@ export function getDailyForMode(modeKey: string, date = new Date()): DailyGame {
 export function isModeKey(key: string): key is keyof typeof DATA {
   return key in DATA;
 }
+
+export function getTitlesForMode(modeKey: string): string[] {
+  const list = DATA[modeKey];
+  if (!list) return [];
+  return list.map((g) => g.title);
+}
