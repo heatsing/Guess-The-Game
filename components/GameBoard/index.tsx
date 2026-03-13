@@ -5,6 +5,7 @@ import type { DailyGame } from "@/lib/gameTypes";
 import { normalizeAnswer } from "@/lib/gameTypes";
 import GuessInput from "@/components/GuessInput";
 import ImageReveal from "@/components/ImageReveal";
+import { dispatchStatsUpdate } from "@/components/PlayerStatistics";
 
 type StoredState = {
   puzzleKey: string;
@@ -40,8 +41,9 @@ export default function GameBoard({
   const [message, setMessage] = useState<string>("");
 
   const maxGuesses = game.maxGuesses ?? 6;
+  const totalClues = Math.max(1, game.images.length || 6);
   const remaining = Math.max(0, maxGuesses - guesses.length);
-  const unlockedCount = Math.min(game.images.length || 6, Math.max(1, guesses.length + 1));
+  const unlockedCount = Math.min(totalClues, Math.max(1, guesses.length + 1));
 
   const finished = status !== "playing";
 
@@ -70,6 +72,7 @@ export default function GameBoard({
     const st: StoredState = { puzzleKey: game.puzzleKey, guesses, status };
     try {
       localStorage.setItem(storageKey(storageNamespace, game.puzzleKey), JSON.stringify(st));
+      if (status === "won" || status === "lost") dispatchStatsUpdate(storageNamespace);
     } catch {
       // ignore
     }
@@ -97,7 +100,7 @@ export default function GameBoard({
       return;
     }
 
-    setMessage(`Nope, try again! (clue ${Math.min(unlockedCount + 1, 6)}/6 unlocked)`);
+    setMessage(`Nope, try again! (clue ${Math.min(unlockedCount + 1, totalClues)}/${totalClues} unlocked)`);
   }
 
   return (
@@ -113,7 +116,7 @@ export default function GameBoard({
               Guesses: <span className="font-semibold">{guesses.length}</span>/{maxGuesses}
             </div>
             <div className="rounded-xl border border-line bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200">
-              Clues: <span className="font-semibold">{unlockedCount}</span>/6
+              Clues: <span className="font-semibold">{unlockedCount}</span>/{totalClues}
             </div>
           </div>
         </div>
@@ -163,15 +166,21 @@ export default function GameBoard({
       <GuessInput disabled={finished} onSubmitGuess={submitGuess} helperText={helperText} />
 
       <section className="rounded-2xl border border-line bg-card p-4 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <div className="text-sm font-medium text-slate-900 dark:text-white">How to add your own games</div>
+        <div className="text-sm font-medium text-slate-900 dark:text-white">
+          How to add your own {storageNamespace === "game" ? "games" : "puzzles"}
+        </div>
         <ul className="mt-2 list-disc pl-5 text-xs text-slate-600 dark:text-slate-400">
           <li>
-            Put 6 images per game under <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">public/images/</code> (from
+            Put up to 6 images per puzzle under{" "}
+            <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">public/images/</code> (from
             hardest to easiest / blurriest to clearest).
           </li>
           <li>
-            In <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">data/games.json</code>, update the corresponding{" "}
-            <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">images</code> array to point at those paths.
+            In{" "}
+            <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">
+              data/{storageNamespace === "game" ? "games" : `${storageNamespace}s`}.json
+            </code>
+            , update the <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">images</code> array for each entry.
           </li>
           <li>The daily puzzle cycles through your list based on the date (UTC).</li>
         </ul>

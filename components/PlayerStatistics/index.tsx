@@ -84,8 +84,17 @@ function calcStreaks(sorted: StoredState[]): { current: number; max: number } {
   return { current, max: maxStreak };
 }
 
+const STATS_UPDATE_EVENT = "gtg:stats-update";
+
+export function dispatchStatsUpdate(namespace: string) {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(STATS_UPDATE_EVENT, { detail: { namespace } }));
+  }
+}
+
 export default function PlayerStatistics({ namespace }: { namespace: string }) {
   const [states, setStates] = useState<StoredState[]>([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     try {
@@ -104,6 +113,14 @@ export default function PlayerStatistics({ namespace }: { namespace: string }) {
     } catch {
       setStates([]);
     }
+  }, [namespace, refreshTrigger]);
+
+  useEffect(() => {
+    const handler = (e: CustomEvent<{ namespace: string }>) => {
+      if (e.detail?.namespace === namespace) setRefreshTrigger((t) => t + 1);
+    };
+    window.addEventListener(STATS_UPDATE_EVENT, handler as EventListener);
+    return () => window.removeEventListener(STATS_UPDATE_EVENT, handler as EventListener);
   }, [namespace]);
 
   const stats = useMemo<Stats>(() => {

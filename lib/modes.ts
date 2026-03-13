@@ -3,6 +3,22 @@ export type Mode = {
   label: string;
   href: string;
   description: string;
+  icon?: string;
+};
+
+const DEFAULT_ICONS: Record<string, string> = {
+  game: "🎮",
+  book: "📖",
+  movie: "🎬",
+  logo: "🏷️",
+  house: "🏠",
+  angle: "📐",
+  phrase: "💬",
+  song: "🎵",
+  animal: "🐾",
+  plant: "🌿",
+  number: "🔢",
+  price: "💰",
 };
 
 export const MODES: Mode[] = [
@@ -79,4 +95,8 @@ export const MODES: Mode[] = [
     description: "Guess today’s price from image clues. Wrong guesses unlock more clues.",
   },
 ];
+
+export function getModeIcon(modeKey: string): string {
+  return DEFAULT_ICONS[modeKey] ?? "🎮";
+}
 

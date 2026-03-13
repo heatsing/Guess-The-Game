@@ -20,6 +20,8 @@ npm run dev
 
 Runs at `http://localhost:3006` by default.
 
+**Before committing:** run `npm run check` (lint + build). CI runs the same on every push/PR — see [docs/ITERATION.md](docs/ITERATION.md) for how to keep improving the project.
+
 ## Data
 
 - **Puzzles**: `data/games.json` (games), `data/books.json` (books), etc.

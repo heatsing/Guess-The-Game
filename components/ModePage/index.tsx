@@ -1,6 +1,7 @@
 import type { DailyGame } from "@/lib/gameTypes";
 import GameBoard from "@/components/GameBoard";
 import PlayerStatistics from "@/components/PlayerStatistics";
+import CalendarDateCard from "@/components/CalendarDateCard";
 import { MODES } from "@/lib/modes";
 import { GAME_RULES } from "@/lib/gameRules";
 import { HOW_TO_PLAY } from "@/lib/howToPlay";
@@ -55,17 +56,14 @@ export default function ModePage({ modeKey, modeLabel, description, daily }: Pro
       <section className="rounded-2xl border border-line bg-card p-6 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
         <SectionTitle>DAILY CHALLENGE</SectionTitle>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-line bg-white px-4 py-3 dark:border-slate-600 dark:bg-slate-700/50">
-            <div className="text-xs text-slate-700 dark:text-slate-200">Puzzle date (UTC)</div>
-            <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{daily.puzzleKey}</div>
-          </div>
+          <CalendarDateCard puzzleKey={daily.puzzleKey} />
           <div className="rounded-xl border border-line bg-white px-4 py-3 dark:border-slate-600 dark:bg-slate-700/50">
             <div className="text-xs text-slate-700 dark:text-slate-200">Max guesses</div>
             <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{daily.maxGuesses}</div>
           </div>
           <div className="rounded-xl border border-line bg-white px-4 py-3 dark:border-slate-600 dark:bg-slate-700/50">
             <div className="text-xs text-slate-700 dark:text-slate-200">Clues</div>
-            <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{Math.max(6, daily.images.length)}</div>
+            <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{Math.max(1, daily.images.length || 6)}</div>
           </div>
         </div>
       </section>

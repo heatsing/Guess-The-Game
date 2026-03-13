@@ -6,7 +6,7 @@ export { normalizeAnswer } from "@/lib/gameTypes";
 export function getDailyGame(date = new Date()): DailyGame {
   const list = games as Game[];
   if (!list.length) {
-    throw new Error("data/games.json 为空：请先在里面添加至少 1 个游戏。");
+    throw new Error("data/games.json is empty. Add at least one game.");
   }
 
   return getDailyFromList(list, date);

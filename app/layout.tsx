@@ -22,13 +22,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-dvh antialiased">
         <div className="sticky top-0 z-40 w-screen border-b border-yellow-500 bg-[#facc15] text-slate-900">
-          <div className="mx-auto flex h-8 max-w-6xl items-center justify-center gap-3 px-3 text-xs font-semibold md:gap-5">
-            <a href="/game" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">🎯 Daily ▾</a>
-            <a href="/game" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">📅</a>
-            <a href="/price" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">💰</a>
-            <a href="/game" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">🏆</a>
-            <a href="/game" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">📊</a>
-            <a href="#faq" className="rounded-md px-2 py-0.5 hover:bg-yellow-400/70">❓</a>
+          <div className="mx-auto flex h-11 max-w-6xl items-center justify-center gap-3 px-3 text-sm font-semibold md:gap-6 md:text-base">
+            <a href="/game" className="rounded-md px-3 py-1 hover:bg-yellow-400/70">🎯 Daily ▾</a>
+            <a href="/game" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">📅</a>
+            <a href="/price" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">💰</a>
+            <a href="/game" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">🏆</a>
+            <a href="/game" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">📊</a>
+            <a href="#faq" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">❓</a>
           </div>
         </div>
 
