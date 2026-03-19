@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { MODES } from "@/lib/modes";
-import { getDailyForMode, isModeKey } from "@/lib/getDailyForMode";
+import { getDailyForModeSmart, isModeKey } from "@/lib/getDailyForMode";
 import ModePage from "@/components/ModePage";
 
 export function generateStaticParams() {
@@ -15,7 +15,7 @@ export default async function ModeRoute({ params }: Props) {
     notFound();
   }
   const modeConfig = MODES.find((m) => m.key === mode)!;
-  const daily = getDailyForMode(mode);
+  const daily = await getDailyForModeSmart(mode);
   return (
     <ModePage
       modeKey={modeConfig.key}

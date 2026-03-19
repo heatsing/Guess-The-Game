@@ -1,6 +1,7 @@
 import type { Game, DailyGame } from "@/lib/gameTypes";
 import { getDailyFromList } from "@/lib/daily";
 import { getDailyGame } from "@/api/getGame";
+import { getSanityDailyForMode, getSanityTitlesForMode } from "@/lib/sanity/server";
 
 import games from "@/data/games.json";
 import books from "@/data/books.json";
@@ -49,4 +50,16 @@ export function getTitlesForMode(modeKey: string): string[] {
   const list = DATA[modeKey];
   if (!list) return [];
   return list.map((g) => g.title);
+}
+
+export async function getDailyForModeSmart(modeKey: string, date = new Date()): Promise<DailyGame> {
+  const fromSanity = await getSanityDailyForMode(modeKey, date);
+  if (fromSanity) return fromSanity;
+  return getDailyForMode(modeKey, date);
+}
+
+export async function getTitlesForModeSmart(modeKey: string): Promise<string[]> {
+  const fromSanity = await getSanityTitlesForMode(modeKey);
+  if (fromSanity) return fromSanity;
+  return getTitlesForMode(modeKey);
 }

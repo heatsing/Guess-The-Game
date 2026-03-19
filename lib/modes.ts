@@ -1,102 +1,115 @@
 export type Mode = {
   key: string;
   label: string;
+  shortLabel: string;
+  badge: string;
   href: string;
   description: string;
-  icon?: string;
-};
-
-const DEFAULT_ICONS: Record<string, string> = {
-  game: "🎮",
-  book: "📖",
-  movie: "🎬",
-  logo: "🏷️",
-  house: "🏠",
-  angle: "📐",
-  phrase: "💬",
-  song: "🎵",
-  animal: "🐾",
-  plant: "🌿",
-  number: "🔢",
-  price: "💰",
 };
 
 export const MODES: Mode[] = [
   {
     key: "game",
     label: "Guess The Game",
+    shortLabel: "Game",
+    badge: "VG",
     href: "/game",
-    description: "Reveal images step by step and guess today’s video game.",
+    description: "Peel back six visual clues and name today's video game.",
   },
   {
     key: "book",
     label: "Guess The Book",
+    shortLabel: "Book",
+    badge: "BK",
     href: "/book",
-    description: "Covers, quotes, or scenes — can you name the book?",
+    description: "Covers, quotes, and scenes that narrow down a single book.",
   },
   {
     key: "movie",
-    label: "Guess The Movie Name",
+    label: "Guess The Movie",
+    shortLabel: "Movie",
+    badge: "MV",
     href: "/movie",
-    description: "Frames, posters, or props from movies.",
+    description: "Frames, props, and posters from today's hidden film.",
   },
   {
     key: "logo",
     label: "Guess The Logo",
+    shortLabel: "Logo",
+    badge: "LG",
     href: "/logo",
-    description: "Cropped brand logos, revealed clue by clue.",
+    description: "Brand marks revealed from tight crops to full clarity.",
   },
   {
     key: "house",
     label: "Guess The House",
+    shortLabel: "House",
+    badge: "HS",
     href: "/house",
-    description: "Architecture and interiors from famous places.",
+    description: "Architecture and interiors from memorable homes and landmarks.",
   },
   {
     key: "angle",
     label: "Guess The Angle",
+    shortLabel: "Angle",
+    badge: "AG",
     href: "/angle",
-    description: "Extreme close-ups and weird angles.",
+    description: "Extreme close-ups and strange perspectives that reward observation.",
   },
   {
     key: "phrase",
     label: "Guess The Phrase",
+    shortLabel: "Phrase",
+    badge: "PH",
     href: "/phrase",
-    description: "Rebus-style visual puzzles and phrases.",
+    description: "Visual riddles and rebus puzzles turned into a daily challenge.",
   },
   {
     key: "song",
     label: "Guess The Song",
+    shortLabel: "Song",
+    badge: "SG",
     href: "/song",
-    description: "Album art, lyrics fragments, or music video clues.",
+    description: "Album art, lyric fragments, and music video clues for one track.",
   },
   {
     key: "animal",
     label: "Guess The Animal",
+    shortLabel: "Animal",
+    badge: "AN",
     href: "/animal",
-    description: "Silhouettes, habitats, and close-ups.",
+    description: "Silhouettes, textures, and habitats that point to one animal.",
   },
   {
     key: "plant",
     label: "Guess The Plant",
+    shortLabel: "Plant",
+    badge: "PL",
     href: "/plant",
-    description: "Leaves, flowers, textures — identify the plant.",
+    description: "Leaves, flowers, and stems that reveal a single plant.",
   },
   {
     key: "number",
     label: "Guess The Number",
+    shortLabel: "Number",
+    badge: "NM",
     href: "/number",
-    description: "Logic hints and visual clues to find the secret number.",
+    description: "Logic-driven rounds where each clue tightens the answer.",
   },
   {
     key: "price",
     label: "Guess The Price",
+    shortLabel: "Price",
+    badge: "PR",
     href: "/price",
-    description: "Guess today’s price from image clues. Wrong guesses unlock more clues.",
+    description: "Estimate the mystery price using visuals and a limited reveal budget.",
   },
 ];
 
-export function getModeIcon(modeKey: string): string {
-  return DEFAULT_ICONS[modeKey] ?? "🎮";
+export function getModeBadge(modeKey: string): string {
+  return MODES.find((mode) => mode.key === modeKey)?.badge ?? "GT";
 }
 
+export function getModeIcon(modeKey: string): string {
+  return getModeBadge(modeKey);
+}

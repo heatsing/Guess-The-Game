@@ -15,9 +15,11 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@prisma/client": "^7.4.2",
+    "@prisma/client": "^7.5.0",
+    "@sanity/client": "^7.17.0",
+    "@sanity/image-url": "^2.0.3",
     "next": "^16.1.6",
-    "prisma": "^7.4.2",
+    "prisma": "^7.5.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

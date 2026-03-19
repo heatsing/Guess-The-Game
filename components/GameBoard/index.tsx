@@ -31,53 +31,64 @@ export default function GameBoard({
 }) {
   const [guesses, setGuesses] = useState<string[]>([]);
   const [status, setStatus] = useState<StoredState["status"]>("playing");
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState("");
   const [shareInfo, setShareInfo] = useState<string | null>(null);
 
   const maxGuesses = game.maxGuesses ?? 6;
   const totalClues = Math.max(1, game.images.length || 6);
-  const [cluesUsed, setCluesUsed] = useState<number>(1);
+  const [cluesUsed, setCluesUsed] = useState(1);
 
   const remaining = Math.max(0, maxGuesses - guesses.length);
   const unlockedCount = Math.min(totalClues, Math.max(1, cluesUsed));
-
   const finished = status !== "playing";
+  const attemptsProgress = Math.round((guesses.length / maxGuesses) * 100);
+  const clueProgress = Math.round((unlockedCount / totalClues) * 100);
 
   const helperText = useMemo(() => {
-    if (status === "won") return `You got it! The answer is “${game.title}”.`;
-    if (status === "lost") return `Out of guesses. The answer was “${game.title}”.`;
-    return `Guesses left: ${remaining} / ${maxGuesses}`;
-  }, [game.title, maxGuesses, remaining, status]);
+    if (status === "won") {
+      return `Solved in ${guesses.length} ${guesses.length === 1 ? "guess" : "guesses"}. The answer is ${game.title}.`;
+    }
+    if (status === "lost") {
+      return `Round complete. The answer was ${game.title}.`;
+    }
+    return `${remaining} guesses left. Each miss unlocks the next clue.`;
+  }, [game.title, guesses.length, remaining, status]);
 
   useEffect(() => {
     try {
       const raw =
         localStorage.getItem(storageKey(storageNamespace, game.puzzleKey)) ??
-        localStorage.getItem(`gtg:v1:${game.puzzleKey}`); // backward compat
+        localStorage.getItem(`gtg:v1:${game.puzzleKey}`);
       if (!raw) return;
       const parsed = JSON.parse(raw) as StoredState;
       if (parsed?.puzzleKey !== game.puzzleKey) return;
       setGuesses(Array.isArray(parsed.guesses) ? parsed.guesses : []);
       setStatus(parsed.status ?? "playing");
-      const fromStore = typeof parsed.cluesUsed === "number" ? parsed.cluesUsed : (Array.isArray(parsed.guesses) ? parsed.guesses.length + 1 : 1);
+      const fromStore =
+        typeof parsed.cluesUsed === "number"
+          ? parsed.cluesUsed
+          : Array.isArray(parsed.guesses)
+            ? parsed.guesses.length + 1
+            : 1;
       setCluesUsed(Math.min(totalClues, Math.max(1, fromStore)));
     } catch {
-      // ignore
+      // ignore malformed local state
     }
   }, [game.puzzleKey, storageNamespace, totalClues]);
 
   useEffect(() => {
-    const st: StoredState = { puzzleKey: game.puzzleKey, guesses, status, cluesUsed };
+    const storedState: StoredState = { puzzleKey: game.puzzleKey, guesses, status, cluesUsed };
     try {
-      localStorage.setItem(storageKey(storageNamespace, game.puzzleKey), JSON.stringify(st));
+      localStorage.setItem(storageKey(storageNamespace, game.puzzleKey), JSON.stringify(storedState));
       if (status === "won" || status === "lost") {
         dispatchStatsUpdate(storageNamespace);
-        setShareInfo(buildShareText({ game, guesses, status }));
+        const url = typeof window !== "undefined" ? window.location.href : undefined;
+        setShareInfo(buildShareText({ game, guesses, status, url }));
       }
     } catch {
-      // ignore
+      // ignore storage errors
     }
-  }, [game, guesses, status, cluesUsed, storageNamespace]);
+  }, [cluesUsed, game, guesses, status, storageNamespace]);
 
   function submitGuess(rawGuess: string) {
     if (finished) return;
@@ -86,31 +97,33 @@ export default function GameBoard({
     if (!cleaned) return;
 
     const nextGuesses = [...guesses, cleaned].slice(0, maxGuesses);
+    const nextClue = Math.min(totalClues, Math.max(cluesUsed, nextGuesses.length + 1));
+
     setGuesses(nextGuesses);
-    setCluesUsed((prev) => Math.min(totalClues, Math.max(prev, nextGuesses.length + 1)));
+    setCluesUsed(nextClue);
 
     if (isCorrectGuess(game, cleaned)) {
       setStatus("won");
-      setMessage("Correct!");
+      setMessage("Correct. Puzzle solved.");
       return;
     }
 
-    const used = nextGuesses.length;
-    if (used >= maxGuesses) {
+    if (nextGuesses.length >= maxGuesses) {
       setStatus("lost");
-      setMessage("Nice try, but not quite.");
+      setMessage("No guesses left. Better luck tomorrow.");
       return;
     }
 
-    setMessage(`Nope, try again! (clue ${Math.min(unlockedCount + 1, totalClues)}/${totalClues} unlocked)`);
+    setMessage(`Not this time. Clue ${nextClue} of ${totalClues} is now open.`);
   }
 
   function skipClue() {
     if (finished) return;
-    setCluesUsed((prev) => {
-      const next = Math.min(totalClues, prev + 1);
-      if (next > prev) {
-        setMessage(`Skipped. Clue ${next}/${totalClues} unlocked.`);
+
+    setCluesUsed((current) => {
+      const next = Math.min(totalClues, current + 1);
+      if (next > current) {
+        setMessage(`Manual reveal used. Clue ${next} of ${totalClues} is now open.`);
       }
       return next;
     });
@@ -118,157 +131,162 @@ export default function GameBoard({
 
   async function shareResult() {
     if (!shareInfo) return;
+
     try {
-      if (typeof navigator !== "undefined") {
-        const nav: any = navigator;
-        if (typeof nav.share === "function") {
-          await nav.share({ text: shareInfo });
-          return;
-        }
-        if (nav.clipboard && typeof nav.clipboard.writeText === "function") {
-          await nav.clipboard.writeText(shareInfo);
-          setMessage("Result copied to clipboard. Share it with friends!");
-          return;
-        }
+      const shareUrl = typeof window !== "undefined" ? window.location.href : undefined;
+
+      if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+        await navigator.share({
+          title: "GuessTheGame",
+          text: shareInfo,
+          url: shareUrl,
+        });
+        return;
       }
+
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareInfo);
+        setMessage("Result copied to clipboard.");
+        return;
+      }
+
+      setMessage("Sharing is not available on this device.");
     } catch {
-      // ignore share errors
+      setMessage("Sharing was cancelled.");
     }
   }
 
+  const statusTone =
+    status === "won"
+      ? "border-green-500/30 bg-green-500/10 text-green-800 dark:text-green-200"
+      : status === "lost"
+        ? "border-red-500/30 bg-red-500/10 text-red-800 dark:text-red-200"
+        : "border-[color:var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)]";
+
   return (
-    <main className="grid gap-4">
-      <section className="rounded-2xl border border-line bg-card p-4 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <div className="text-sm text-slate-700 dark:text-slate-200">Today&apos;s puzzle</div>
-            <div className="text-lg font-semibold tracking-tight text-slate-900 dark:text-white">{modeLabel}</div>
+    <div className="space-y-6">
+      <section className="app-frame px-5 py-5 md:px-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <div className="section-eyebrow">Live board</div>
+            <h2 className="font-display mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">
+              Today's {modeLabel} puzzle
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{helperText}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="rounded-xl border border-line bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200">
-              Guesses: <span className="font-semibold">{guesses.length}</span>/{maxGuesses}
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="metric-card min-w-[11rem]">
+              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Guesses used</div>
+              <div className="font-display mt-2 text-2xl font-semibold text-[var(--foreground)]">
+                {guesses.length}/{maxGuesses}
+              </div>
             </div>
-            <div className="rounded-xl border border-line bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200">
-              Clues: <span className="font-semibold">{unlockedCount}</span>/{totalClues}
+            <div className="metric-card min-w-[11rem]">
+              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clues unlocked</div>
+              <div className="font-display mt-2 text-2xl font-semibold text-[var(--foreground)]">
+                {unlockedCount}/{totalClues}
+              </div>
             </div>
           </div>
         </div>
 
         {message ? (
-          <div
-            className={[
-              "mt-3 rounded-xl border px-3 py-2 text-sm",
-              status === "won"
-                ? "border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-900/30 dark:text-green-200"
-                : status === "lost"
-                  ? "border-red-200 bg-red-50 text-red-800 dark:border-red-800 dark:bg-red-900/30 dark:text-red-200"
-                  : "border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200",
-            ].join(" ")}
-          >
-            {message}
-          </div>
+          <div className={`mt-5 rounded-[22px] border px-4 py-3 text-sm ${statusTone}`}>{message}</div>
         ) : null}
 
-        <div className="mt-4">
-          <div className="text-sm font-medium text-slate-900 dark:text-white">Guess history</div>
-          {guesses.length ? (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {guesses.map((g, i) => {
-                const ok = isCorrectGuess(game, g);
-                return (
-                  <span
-                    key={`${i}-${g}`}
-                    className={[
-                      "rounded-full border px-3 py-1 text-xs font-medium",
-                      ok ? "border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-900/30 dark:text-green-200" : "border-line bg-white text-slate-700 dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-200",
-                    ].join(" ")}
-                  >
-                    {g}
-                  </span>
-                );
-              })}
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <div>
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+              <span>Attempt pace</span>
+              <span>{attemptsProgress}%</span>
             </div>
-          ) : (
-            <div className="mt-2 text-xs text-slate-700 dark:text-slate-200">No guesses yet.</div>
-          )}
+            <div className="progress-rail mt-2">
+              <span className="progress-fill" style={{ width: `${attemptsProgress}%` }} />
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+              <span>Reveal depth</span>
+              <span>{clueProgress}%</span>
+            </div>
+            <div className="progress-rail mt-2">
+              <span className="progress-fill cool" style={{ width: `${clueProgress}%` }} />
+            </div>
+          </div>
         </div>
       </section>
 
       <ImageReveal images={game.images} unlockedCount={unlockedCount} />
 
-      <section className="rounded-2xl border border-line bg-card p-3 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <div className="flex items-center justify-between gap-3">
-          <div className="text-xs font-medium uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">
-            CLUE PROGRESSION
-          </div>
-          <div className="flex items-center gap-1 text-lg leading-none">
-            {Array.from({ length: totalClues }).map((_, i) => {
-              const index = i + 1;
-              const unlocked = index <= unlockedCount;
-              return (
-                <span key={index} aria-hidden className={unlocked ? "text-green-500" : "text-slate-400 dark:text-slate-600"}>
-                  {unlocked ? "🟩" : "⬜"}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       <GuessInput
         disabled={finished}
-        onSubmitGuess={submitGuess}
         helperText={helperText}
+        onSubmitGuess={submitGuess}
         options={titles}
         onSkip={cluesUsed < totalClues ? skipClue : undefined}
       />
 
-      {finished && shareInfo ? (
-        <section className="rounded-2xl border border-line bg-card p-4 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="text-sm font-medium text-slate-900 dark:text-white">Share your result</div>
-                <div className="mt-1 text-xs text-slate-700 dark:text-slate-200">
-                  This preview matches what will be copied or shared, similar to other daily puzzle games.
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={shareResult}
-                className="mt-2 inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-xs font-medium text-white shadow-sm hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white sm:mt-0"
-              >
-                Share / Copy
-              </button>
+      <section className="app-frame px-5 py-5 md:px-6">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <div className="section-eyebrow">Guess history</div>
+            <div className="mt-2 text-sm leading-7 text-[var(--muted)]">
+              Every submitted answer stays visible until the round ends.
             </div>
-            <pre className="mt-1 max-h-40 overflow-auto rounded-xl bg-slate-900 px-3 py-2 text-[11px] leading-relaxed text-slate-100 shadow-inner dark:bg-black/80">
-{shareInfo}
-            </pre>
           </div>
+          <span className="rounded-full border border-[color:var(--border)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+            {guesses.length} entries
+          </span>
+        </div>
+
+        {guesses.length ? (
+          <div className="mt-5 flex flex-wrap gap-2.5">
+            {guesses.map((guess, index) => {
+              const correct = isCorrectGuess(game, guess);
+              return (
+                <span
+                  key={`${index}-${guess}`}
+                  className={`rounded-full border px-4 py-2 text-sm font-medium ${
+                    correct
+                      ? "border-green-500/30 bg-green-500/10 text-green-800 dark:text-green-200"
+                      : "border-[color:var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)]"
+                  }`}
+                >
+                  {guess}
+                </span>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="mt-5 rounded-[22px] border border-dashed border-[color:var(--border)] px-4 py-5 text-sm text-[var(--muted)]">
+            No guesses yet. Start with the clue above and lock in your first answer.
+          </div>
+        )}
+      </section>
+
+      {finished && shareInfo ? (
+        <section className="app-frame px-5 py-5 md:px-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="section-eyebrow">Share result</div>
+              <h3 className="font-display mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                Send your score without spoiling the answer
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                The preview below is exactly what gets copied or shared.
+              </p>
+            </div>
+            <button type="button" onClick={shareResult} className="primary-button">
+              Share or copy
+            </button>
+          </div>
+
+          <pre className="mt-5 overflow-auto rounded-[24px] border border-[color:var(--border)] bg-slate-950 px-4 py-4 text-xs leading-6 text-slate-100">
+{shareInfo}
+          </pre>
         </section>
       ) : null}
-
-      <section className="rounded-2xl border border-line bg-card p-4 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <div className="text-sm font-medium text-slate-900 dark:text-white">
-          How to add your own {storageNamespace === "game" ? "games" : "puzzles"}
-        </div>
-        <ul className="mt-2 list-disc pl-5 text-xs text-slate-600 dark:text-slate-400">
-          <li>
-            Put up to 6 images per puzzle under{" "}
-            <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">public/images/</code> (from
-            hardest to easiest / blurriest to clearest).
-          </li>
-          <li>
-            In{" "}
-            <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">
-              data/{storageNamespace === "game" ? "games" : `${storageNamespace}s`}.json
-            </code>
-            , update the <code className="rounded bg-slate-100 px-1 dark:bg-slate-700 dark:text-slate-200">images</code> array for each entry.
-          </li>
-          <li>The daily puzzle cycles through your list based on the date (UTC).</li>
-        </ul>
-      </section>
-    </main>
+    </div>
   );
 }
-

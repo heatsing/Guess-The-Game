@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, KeyboardEvent, useMemo, useState } from "react";
+import { FormEvent, KeyboardEvent, useDeferredValue, useMemo, useState } from "react";
 
 type Props = {
   disabled?: boolean;
@@ -14,63 +14,65 @@ type Props = {
 type Scored = { title: string; score: number };
 
 function fuzzyScore(source: string, query: string): number {
-  if (!source || !query) return -Infinity;
-  const s = source.toLowerCase();
-  const q = query.toLowerCase();
-  if (s === q) return 1000;
-  if (s.startsWith(q)) return 800;
-  const idx = s.indexOf(q);
-  if (idx >= 0) return 600 - idx;
+  if (!source || !query) return Number.NEGATIVE_INFINITY;
+  const normalizedSource = source.toLowerCase();
+  const normalizedQuery = query.toLowerCase();
 
-  // simple subsequence score
+  if (normalizedSource === normalizedQuery) return 1000;
+  if (normalizedSource.startsWith(normalizedQuery)) return 800;
+
+  const index = normalizedSource.indexOf(normalizedQuery);
+  if (index >= 0) return 600 - index;
+
   let score = 0;
-  let j = 0;
-  for (let i = 0; i < s.length && j < q.length; i++) {
-    if (s[i] === q[j]) {
+  let queryIndex = 0;
+  for (let i = 0; i < normalizedSource.length && queryIndex < normalizedQuery.length; i++) {
+    if (normalizedSource[i] === normalizedQuery[queryIndex]) {
       score += 10;
-      j++;
+      queryIndex++;
     }
   }
-  if (j < q.length) return -Infinity;
-  return score;
+
+  return queryIndex < normalizedQuery.length ? Number.NEGATIVE_INFINITY : score;
 }
 
 export default function GuessInput({
   disabled,
   onSubmitGuess,
-  placeholder = "Type the game title…",
+  placeholder = "Type your answer",
   helperText,
   options,
   onSkip,
 }: Props) {
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
-  const [highlightIndex, setHighlightIndex] = useState<number>(-1);
+  const [highlightIndex, setHighlightIndex] = useState(-1);
 
-  const canSubmit = useMemo(() => {
-    return !disabled && value.trim().length > 0;
-  }, [disabled, value]);
+  const deferredValue = useDeferredValue(value.trim());
+  const canSubmit = !disabled && value.trim().length > 0;
 
   const suggestions = useMemo(() => {
-    if (!options || !value.trim()) return [] as Scored[];
-    const scored: Scored[] = options.map((t) => ({
-      title: t,
-      score: fuzzyScore(t, value),
-    }));
-    return scored
-      .filter((s) => s.score > -Infinity)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
-  }, [options, value]);
+    if (!options || !deferredValue) return [] as Scored[];
 
-  function onSubmit(e: FormEvent) {
+    return options
+      .map((title) => ({
+        title,
+        score: fuzzyScore(title, deferredValue),
+      }))
+      .filter((item) => item.score > Number.NEGATIVE_INFINITY)
+      .sort((left, right) => right.score - left.score)
+      .slice(0, 8);
+  }, [deferredValue, options]);
+
+  function submitForm(e: FormEvent) {
     e.preventDefault();
     if (!canSubmit) return;
-    const g = value.trim();
+
+    const guess = value.trim();
     setValue("");
     setOpen(false);
     setHighlightIndex(-1);
-    onSubmitGuess(g);
+    onSubmitGuess(guess);
   }
 
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
@@ -78,36 +80,55 @@ export default function GuessInput({
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setHighlightIndex((prev) => {
-        const next = prev + 1;
-        return next >= suggestions.length ? 0 : next;
-      });
-    } else if (e.key === "ArrowUp") {
+      setHighlightIndex((current) => (current + 1 >= suggestions.length ? 0 : current + 1));
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
       e.preventDefault();
-      setHighlightIndex((prev) => {
-        const next = prev - 1;
-        return next < 0 ? suggestions.length - 1 : next;
-      });
-    } else if (e.key === "Enter") {
-      if (highlightIndex >= 0 && highlightIndex < suggestions.length) {
-        e.preventDefault();
-        const chosen = suggestions[highlightIndex]!.title;
-        setValue(chosen);
-        setOpen(false);
-        setHighlightIndex(-1);
-      }
-    } else if (e.key === "Escape") {
+      setHighlightIndex((current) => (current - 1 < 0 ? suggestions.length - 1 : current - 1));
+      return;
+    }
+
+    if (e.key === "Enter" && highlightIndex >= 0 && highlightIndex < suggestions.length) {
+      e.preventDefault();
+      setValue(suggestions[highlightIndex]!.title);
+      setOpen(false);
+      setHighlightIndex(-1);
+      return;
+    }
+
+    if (e.key === "Escape") {
       e.preventDefault();
       setOpen(false);
       setHighlightIndex(-1);
     }
   }
 
+  const showSuggestions = open && suggestions.length > 0;
+
   return (
-    <section className="rounded-2xl border border-line bg-card p-4 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-      <div className="text-sm font-medium text-slate-900 dark:text-white">Your guess</div>
-      <form onSubmit={onSubmit} className="mt-3 flex gap-2">
-        <div className="relative w-full">
+    <section className="app-frame px-5 py-5 md:px-6">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="max-w-2xl">
+          <div className="section-eyebrow">Submit your guess</div>
+          <h3 className="font-display mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+            Keep the round moving
+          </h3>
+          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+            Accepted titles show up as you type. Arrow keys move through suggestions.
+          </p>
+        </div>
+
+        {onSkip ? (
+          <button type="button" onClick={onSkip} className="secondary-button">
+            Reveal next clue
+          </button>
+        ) : null}
+      </div>
+
+      <form onSubmit={submitForm} className="mt-5 grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="relative">
           <input
             value={value}
             onChange={(e) => {
@@ -119,57 +140,72 @@ export default function GuessInput({
               if (value.trim()) setOpen(true);
             }}
             onBlur={() => {
-              // 简单延迟，允许点击下拉选项
               setTimeout(() => setOpen(false), 120);
             }}
             onKeyDown={handleKeyDown}
             disabled={disabled}
-            className="w-full rounded-xl border border-line bg-white px-3 py-2 text-sm outline-none ring-0 placeholder:text-slate-400 focus:border-brand focus:ring-4 focus:ring-blue-100 disabled:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder:text-slate-400 dark:disabled:bg-slate-800"
             placeholder={placeholder}
+            aria-autocomplete="list"
+            aria-expanded={showSuggestions}
+            className="w-full rounded-[22px] border border-[color:var(--border)] bg-[var(--surface-strong)] px-4 py-4 text-base text-[var(--foreground)] outline-none placeholder:text-slate-400 focus:border-[color:var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
           />
-          {open && suggestions.length > 0 && (
-            <div className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-xl border border-slate-200 bg-white text-sm shadow-lg dark:border-slate-600 dark:bg-slate-800">
-              {suggestions.map((item, index) => (
-                <button
-                  key={item.title}
-                  type="button"
-                  className={`flex w-full items-center justify-between px-3 py-1.5 text-left ${
-                    index === highlightIndex ? "bg-slate-100 dark:bg-slate-700" : "hover:bg-slate-100 dark:hover:bg-slate-700"
-                  }`}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    setValue(item.title);
-                    setOpen(false);
-                    setHighlightIndex(-1);
-                  }}
-                >
-                  <span className="truncate text-slate-800 dark:text-slate-100">{item.title}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col items-stretch gap-2 sm:flex-row">
-          {onSkip && (
-            <button
-              type="button"
-              onClick={onSkip}
-              className="rounded-xl border border-line bg-white px-3 py-2 text-xs font-medium text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
+
+          {showSuggestions ? (
+            <div
+              className="absolute z-20 mt-2 w-full overflow-hidden rounded-[22px] border border-[color:var(--border)] bg-[var(--surface-strong)]"
+              style={{ boxShadow: "var(--shadow-soft)" }}
             >
-              Skip (unlock clue)
-            </button>
-          )}
-          <button
-            type="submit"
-            disabled={!canSubmit}
-            className="rounded-xl bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
-          >
-            Submit
-          </button>
+              <div className="border-b border-[color:var(--border)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                Top matches
+              </div>
+              <div className="max-h-72 overflow-auto py-2">
+                {suggestions.map((item, index) => (
+                  <button
+                    key={item.title}
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      setValue(item.title);
+                      setOpen(false);
+                      setHighlightIndex(-1);
+                    }}
+                    className={`flex w-full items-center justify-between px-4 py-2.5 text-left ${
+                      index === highlightIndex ? "bg-[var(--accent-soft)]" : "hover:bg-[var(--surface-muted)]"
+                    }`}
+                  >
+                    <span className="truncate text-sm font-medium text-[var(--foreground)]">
+                      {item.title}
+                    </span>
+                    <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                      Enter
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
+
+        <button
+          type="submit"
+          disabled={!canSubmit}
+          className="primary-button rounded-[22px] px-6 py-4 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Submit guess
+        </button>
       </form>
-      {helperText ? <div className="mt-2 text-xs text-slate-800 dark:text-slate-200">{helperText}</div> : null}
+
+      <div className="mt-3 flex flex-wrap gap-2 text-xs font-medium uppercase tracking-[0.18em] text-[var(--muted)]">
+        <span>Enter to submit</span>
+        <span>Arrow keys for suggestions</span>
+        {disabled ? <span>Round complete</span> : null}
+      </div>
+
+      {helperText ? (
+        <div className="mt-4 rounded-[22px] border border-[color:var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--foreground)]">
+          {helperText}
+        </div>
+      ) : null}
     </section>
   );
 }
-

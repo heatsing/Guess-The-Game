@@ -2,8 +2,8 @@
 
 import { useMemo } from "react";
 
-function toPuzzleKeyUTC(d: Date) {
-  return d.toISOString().slice(0, 10);
+function toPuzzleKeyUTC(date: Date) {
+  return date.toISOString().slice(0, 10);
 }
 
 type Props = { puzzleKey?: string };
@@ -11,23 +11,22 @@ type Props = { puzzleKey?: string };
 export default function CalendarDateCard({ puzzleKey }: Props) {
   const dateIso = puzzleKey ?? toPuzzleKeyUTC(new Date());
 
-  const pretty = useMemo(() => {
-    const d = new Date(`${dateIso}T12:00:00.000Z`);
+  const prettyDate = useMemo(() => {
+    const date = new Date(`${dateIso}T12:00:00.000Z`);
     return new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
       timeZone: "UTC",
-    }).format(d);
+    }).format(date);
   }, [dateIso]);
 
   return (
-    <div className="rounded-xl border border-line bg-white px-4 py-3 dark:border-slate-600 dark:bg-slate-700/50">
-      <div className="text-xs text-slate-700 dark:text-slate-200">Puzzle date (UTC)</div>
-      <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{dateIso}</div>
-      <div className="mt-1 text-xs text-slate-700 dark:text-slate-200">{pretty}</div>
+    <div className="metric-card">
+      <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Puzzle date</div>
+      <div className="font-display mt-2 text-xl font-semibold text-[var(--foreground)]">{dateIso}</div>
+      <div className="mt-2 text-sm leading-7 text-[var(--muted)]">{prettyDate} (UTC)</div>
     </div>
   );
 }
-

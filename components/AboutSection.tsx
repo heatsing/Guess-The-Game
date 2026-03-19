@@ -4,38 +4,40 @@ import { usePathname } from "next/navigation";
 import { MODES } from "@/lib/modes";
 import { ABOUT_GAME } from "@/lib/aboutGame";
 
-const PATH_TO_MODE: Record<string, string> = {
-  "/": "game",
-  "/game": "game",
-  "/book": "book",
-  "/movie": "movie",
-  "/logo": "logo",
-  "/house": "house",
-  "/angle": "angle",
-  "/phrase": "phrase",
-  "/song": "song",
-  "/animal": "animal",
-  "/plant": "plant",
-  "/number": "number",
-  "/price": "price",
-  "/faq": "game",
-};
+function getModeKeyFromPath(pathname: string): string {
+  const firstSegment = pathname.split("/").filter(Boolean)[0];
+  return MODES.find((mode) => mode.key === firstSegment)?.key ?? "game";
+}
 
 export default function AboutSection() {
   const pathname = usePathname();
-  const modeKey = PATH_TO_MODE[pathname] ?? "game";
-  const mode = MODES.find((m) => m.key === modeKey);
+  const modeKey = getModeKeyFromPath(pathname);
+  const mode = MODES.find((item) => item.key === modeKey);
   const label = mode?.label ?? "Guess The Game";
   const aboutText = ABOUT_GAME[modeKey] ?? ABOUT_GAME.game;
 
   return (
-    <section className="mt-10">
-      <h2 className="mb-4 text-center text-xl font-bold text-slate-900 dark:text-white">
-        About {label}
+    <section className="app-frame px-6 py-8">
+      <div className="section-eyebrow">About this mode</div>
+      <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+        {label}
       </h2>
-      <p className="mx-auto max-w-2xl text-center text-sm leading-relaxed text-slate-700 dark:text-slate-200 md:text-base">
-        {aboutText}
-      </p>
+      <p className="mt-4 text-sm leading-7 text-[var(--muted)] md:text-base">{aboutText}</p>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div className="metric-card">
+          <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Reset cadence</div>
+          <div className="font-display mt-2 text-xl font-semibold text-[var(--foreground)]">
+            Daily at 00:00 UTC
+          </div>
+        </div>
+        <div className="metric-card">
+          <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Progress storage</div>
+          <div className="font-display mt-2 text-xl font-semibold text-[var(--foreground)]">
+            Saved on this device
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

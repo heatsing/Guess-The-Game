@@ -4,89 +4,84 @@ import { usePathname } from "next/navigation";
 import { GAME_RULES } from "@/lib/gameRules";
 import { MODES } from "@/lib/modes";
 
-const PATH_TO_MODE: Record<string, string> = {
-  "/": "game",
-  "/game": "game",
-  "/book": "book",
-  "/movie": "movie",
-  "/logo": "logo",
-  "/house": "house",
-  "/angle": "angle",
-  "/phrase": "phrase",
-  "/song": "song",
-  "/animal": "animal",
-  "/plant": "plant",
-  "/number": "number",
-  "/price": "price",
-  "/faq": "game",
-};
+const SUPPORT_EMAIL = "guessthegameemail@gmail.com";
 
 const GENERIC_FAQS = [
   {
     question: "Why is my answer not accepted?",
     answer:
-      "We maintain a curated list of acceptable answers for each game. If your guess is not accepted, it may not match our database (e.g. spelling, alternate titles, or regional names). This means it will not be counted as correct and you will not be able to complete the game with it. If you think we should add this answer, please email us: guessthegameemail@gmail.com",
+      "We keep a curated list of accepted answers for every puzzle. If a guess is rejected, it usually means the spelling, alternate title, or regional name does not match the stored answers yet. If you think a valid answer should be accepted, email us at guessthegameemail@gmail.com.",
   },
   {
-    question: "Where can I see the answers to the game?",
+    question: "When can I see yesterday's answer?",
     answer:
-      "Answers to today's game you can find only the next day after 12 am. To do this, you need to click on the Yesterday's button. There you will see the answer to the previous game, as well as your guesses in bold.",
+      "Yesterday's solution becomes obvious once the next daily puzzle rolls over at 00:00 UTC. At that point you can compare the previous answer with your stored guesses.",
   },
 ];
 
-function FaqCard({
-  question,
-  answer,
-}: {
-  question: string;
-  answer: string;
-}) {
-  const hasEmail = answer.includes("guessthegameemail@gmail.com");
+function getModeKeyFromPath(pathname: string): string {
+  const firstSegment = pathname.split("/").filter(Boolean)[0];
+  return MODES.find((mode) => mode.key === firstSegment)?.key ?? "game";
+}
+
+function FaqCard({ question, answer }: { question: string; answer: string }) {
+  const hasEmail = answer.includes(SUPPORT_EMAIL);
+  const [beforeEmail, afterEmail] = hasEmail ? answer.split(SUPPORT_EMAIL) : [answer, ""];
+
   return (
-    <article className="rounded-xl border border-slate-200 bg-slate-100/80 px-6 py-5 shadow-sm dark:border-slate-600 dark:bg-slate-700/50">
-      <h3 className="text-base font-bold text-slate-900 dark:text-white">
-        {question}
-      </h3>
-      <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-200">
-        {hasEmail ? (
-          <>
-            {answer.split("guessthegameemail@gmail.com")[0]}
-            <a
-              href="mailto:guessthegameemail@gmail.com"
-              className="text-blue-600 hover:underline dark:text-blue-400"
-            >
-              guessthegameemail@gmail.com
-            </a>
-            {answer.split("guessthegameemail@gmail.com")[1]}
-          </>
-        ) : (
-          answer
-        )}
-      </p>
+    <article className="panel-card-strong overflow-hidden">
+      <details>
+        <summary className="flex items-center justify-between gap-4 px-5 py-4">
+          <span className="font-display text-lg font-semibold tracking-tight text-[var(--foreground)]">
+            {question}
+          </span>
+          <span className="rounded-full border border-[color:var(--border)] px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+            Open
+          </span>
+        </summary>
+        <div className="border-t border-[color:var(--border)] px-5 pb-5 pt-4 text-sm leading-7 text-[var(--muted)]">
+          {hasEmail ? (
+            <>
+              {beforeEmail}
+              <a href={`mailto:${SUPPORT_EMAIL}`} className="font-semibold text-[var(--foreground)] underline">
+                {SUPPORT_EMAIL}
+              </a>
+              {afterEmail}
+            </>
+          ) : (
+            answer
+          )}
+        </div>
+      </details>
     </article>
   );
 }
 
 export default function FAQSection() {
   const pathname = usePathname();
-  const modeKey = PATH_TO_MODE[pathname] ?? "game";
-  const mode = MODES.find((m) => m.key === modeKey);
+  const modeKey = getModeKeyFromPath(pathname);
+  const mode = MODES.find((item) => item.key === modeKey);
   const label = mode?.label ?? "Guess The Game";
   const gameRulesText = GAME_RULES[modeKey] ?? GAME_RULES.game;
 
   const faqItems = [
-    { question: `GAME RULES (${label.toUpperCase()})`, answer: gameRulesText },
+    { question: `${label} rules`, answer: gameRulesText },
     ...GENERIC_FAQS,
   ];
 
   return (
-    <section id="faq" className="mt-10">
-      <h2 className="mb-6 text-center text-xl font-bold text-slate-900 dark:text-white">
-        Frequently Asked Questions
+    <section id="faq" className="app-frame px-6 py-8">
+      <div className="section-eyebrow">Need a rule check?</div>
+      <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+        Frequently asked questions
       </h2>
-      <div className="mx-auto max-w-2xl space-y-6">
-        {faqItems.map((faq, i) => (
-          <FaqCard key={i} question={faq.question} answer={faq.answer} />
+      <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+        Answer acceptance, reset timing, and the small details that affect your streak.
+      </p>
+
+      <div className="mt-6 space-y-3">
+        {faqItems.map((faq, index) => (
+          <FaqCard key={`${faq.question}-${index}`} question={faq.question} answer={faq.answer} />
         ))}
       </div>
     </section>

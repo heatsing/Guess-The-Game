@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDailyForMode, isModeKey } from "@/lib/getDailyForMode";
+import { getDailyForModeSmart, isModeKey } from "@/lib/getDailyForMode";
 
 export async function GET(req: NextRequest) {
   const mode = req.nextUrl.searchParams.get("mode") ?? "game";
@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unknown mode" }, { status: 400 });
   }
 
-  const daily = getDailyForMode(mode);
+  const daily = await getDailyForModeSmart(mode);
   return NextResponse.json(daily);
 }
 

@@ -2,43 +2,41 @@
 
 import { useEffect, useState } from "react";
 
-function getNextUtcMidnight(): Date {
+function getNextUtcMidnight() {
   const now = new Date();
-  const next = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
-  return next;
+  return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
 }
 
-function formatDuration(ms: number): string {
+function formatDuration(ms: number) {
   if (ms <= 0) return "00:00:00";
   const totalSeconds = Math.floor(ms / 1000);
-  const h = Math.floor(totalSeconds / 3600);
-  const m = Math.floor((totalSeconds % 3600) / 60);
-  const s = totalSeconds % 60;
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (value: number) => value.toString().padStart(2, "0");
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
 export default function NextGameCountdown() {
-  const [remaining, setRemaining] = useState(() => {
-    const target = getNextUtcMidnight().getTime();
-    return target - Date.now();
-  });
+  const [remaining, setRemaining] = useState(() => getNextUtcMidnight().getTime() - Date.now());
 
   useEffect(() => {
-    const id = setInterval(() => {
-      const target = getNextUtcMidnight().getTime();
-      setRemaining(target - Date.now());
+    const interval = setInterval(() => {
+      setRemaining(getNextUtcMidnight().getTime() - Date.now());
     }, 1000);
-    return () => clearInterval(id);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const text = formatDuration(remaining);
-
   return (
-    <div className="rounded-xl border border-line bg-white px-4 py-3 text-sm dark:border-slate-600 dark:bg-slate-700/50">
-      <div className="text-xs text-slate-700 dark:text-slate-200">Next game in (UTC)</div>
-      <div className="mt-1 font-semibold tracking-wide text-slate-900 dark:text-white">{text}</div>
+    <div className="metric-card">
+      <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Next drop</div>
+      <div className="font-display mt-2 text-xl font-semibold text-[var(--foreground)]">
+        {formatDuration(remaining)}
+      </div>
+      <div className="mt-2 text-sm leading-7 text-[var(--muted)]">
+        Countdown to the next 00:00 UTC refresh.
+      </div>
     </div>
   );
 }
-

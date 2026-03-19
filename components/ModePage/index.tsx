@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { DailyGame } from "@/lib/gameTypes";
 import GameBoard from "@/components/GameBoard";
 import PlayerStatistics from "@/components/PlayerStatistics";
@@ -6,7 +7,7 @@ import NextGameCountdown from "@/components/NextGameCountdown";
 import { MODES } from "@/lib/modes";
 import { GAME_RULES } from "@/lib/gameRules";
 import { HOW_TO_PLAY } from "@/lib/howToPlay";
-import { getTitlesForMode } from "@/lib/getDailyForMode";
+import { getTitlesForModeSmart } from "@/lib/getDailyForMode";
 
 type Props = {
   modeKey: string;
@@ -15,104 +16,143 @@ type Props = {
   daily: DailyGame;
 };
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">{children}</h2>;
-}
-
-export default function ModePage({ modeKey, modeLabel, description, daily }: Props) {
-  const titles = getTitlesForMode(modeKey);
+export default async function ModePage({ modeKey, modeLabel, description, daily }: Props) {
+  const titles = await getTitlesForModeSmart(modeKey);
+  const mode = MODES.find((item) => item.key === modeKey);
+  const otherModes = MODES.filter((item) => item.key !== modeKey);
+  const howToPlay = HOW_TO_PLAY[modeKey] ?? HOW_TO_PLAY.game;
+  const rules = GAME_RULES[modeKey] ?? GAME_RULES.game;
+  const clueCount = Math.max(1, daily.images.length || 6);
 
   return (
-    <main className="grid gap-4">
-      {/* HERO */}
-      <section className="rounded-2xl border border-line bg-card p-6 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">HERO</div>
-        <div className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">{modeLabel}</div>
-        <p className="mt-2 text-sm text-slate-800 dark:text-slate-200">{description}</p>
-      </section>
-
-      {/* GAME RULES */}
-      <section className="rounded-2xl border border-line bg-card p-6 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <SectionTitle>Game rules</SectionTitle>
-        <p className="mt-3 text-sm leading-relaxed text-slate-800 dark:text-slate-200">
-          {GAME_RULES[modeKey] ?? GAME_RULES.game}
-        </p>
-      </section>
-
-      {/* GAME BOARD */}
-      <section className="rounded-2xl border border-line bg-card p-4 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <div className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">GAME BOARD</div>
-        <GameBoard game={daily} modeLabel={modeLabel} storageNamespace={modeKey} titles={titles} />
-      </section>
-
-      {/* HOW TO PLAY */}
-      <section className="rounded-2xl border border-line bg-card p-6 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <SectionTitle>HOW TO PLAY</SectionTitle>
-        <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm text-slate-800 dark:text-slate-200">
-          <li>Start with the first image clue.</li>
-          <li>Type your guess and submit.</li>
-          <li>Each wrong guess unlocks the next clue.</li>
-          <li>You have up to 6 guesses to find the answer.</li>
-        </ol>
-      </section>
-
-      {/* DAILY CHALLENGE */}
-      <section className="rounded-2xl border border-line bg-card p-6 shadow-soft dark:border-slate-600 dark:bg-slate-800/50">
-        <SectionTitle>DAILY CHALLENGE</SectionTitle>
-        <div className="mt-3 grid gap-3 sm:grid-cols-4">
-          <CalendarDateCard puzzleKey={daily.puzzleKey} />
-          <div className="rounded-xl border border-line bg-white px-4 py-3 dark:border-slate-600 dark:bg-slate-700/50">
-            <div className="text-xs text-slate-700 dark:text-slate-200">Max guesses</div>
-            <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{daily.maxGuesses}</div>
+    <main className="space-y-8">
+      <section className="app-frame px-6 py-8 md:px-8 md:py-10">
+        <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr] xl:items-end">
+          <div className="max-w-3xl">
+            <span className="inline-flex rounded-full bg-[var(--accent-soft)] px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-[var(--foreground)]">
+              {mode?.badge ?? "GT"}
+            </span>
+            <div className="section-eyebrow mt-5">Today's mode</div>
+            <h1 className="font-display mt-3 text-4xl font-semibold tracking-tight text-[var(--foreground)] md:text-5xl">
+              {modeLabel}
+            </h1>
+            <p className="mt-4 text-base leading-8 text-[var(--muted)]">{description}</p>
           </div>
-          <div className="rounded-xl border border-line bg-white px-4 py-3 dark:border-slate-600 dark:bg-slate-700/50">
-            <div className="text-xs text-slate-700 dark:text-slate-200">Clues</div>
-            <div className="mt-1 text-sm font-semibold text-slate-900 dark:text-white">{Math.max(1, daily.images.length || 6)}</div>
+
+          <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+            <div className="metric-card">
+              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Puzzle key</div>
+              <div className="font-display mt-2 text-2xl font-semibold text-[var(--foreground)]">
+                {daily.puzzleKey}
+              </div>
+            </div>
+            <div className="metric-card">
+              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clues</div>
+              <div className="font-display mt-2 text-2xl font-semibold text-[var(--foreground)]">
+                {clueCount}
+              </div>
+            </div>
+            <div className="metric-card">
+              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Max guesses</div>
+              <div className="font-display mt-2 text-2xl font-semibold text-[var(--foreground)]">
+                {daily.maxGuesses}
+              </div>
+            </div>
           </div>
-          <NextGameCountdown />
         </div>
       </section>
 
-      {/* PLAYER STATISTICS */}
-      <section>
-        <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 dark:text-slate-200">PLAYER STATISTICS</div>
-        <PlayerStatistics namespace={modeKey} />
-      </section>
+      <div className="grid gap-8 xl:grid-cols-[1.18fr_0.82fr]">
+        <section className="space-y-6">
+          <GameBoard
+            game={daily}
+            modeLabel={modeLabel}
+            storageNamespace={modeKey}
+            titles={titles}
+          />
+          <PlayerStatistics namespace={modeKey} />
+        </section>
 
-      {/* Full-width block: MORE GAMES + TIPS + FAQ */}
-      <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-8 bg-gradient-to-b from-slate-50 to-slate-100/90 dark:from-slate-800 dark:to-slate-900/90">
-        <div className="mx-auto max-w-6xl px-6 py-16 md:px-12 md:py-24">
-          {/* MORE GAMES */}
-          <section className="mb-20 md:mb-28">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200">MORE GAMES</h2>
-            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {MODES.filter((m) => m.key !== modeKey).map((m) => (
-                <a
-                  key={m.key}
-                  href={m.href}
-                  className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-brand/30 hover:shadow-md dark:border-slate-600 dark:bg-slate-800/50 dark:hover:border-brand/50"
-                >
-                  <div className="text-base font-semibold text-slate-900 group-hover:text-brand dark:text-white dark:group-hover:text-brand">{m.label}</div>
-                  <p className="mt-2 text-sm text-slate-800 dark:text-slate-200">{m.description}</p>
-                </a>
-              ))}
-            </div>
+        <aside className="space-y-6">
+          <section className="panel-card p-6">
+            <div className="section-eyebrow">Rules</div>
+            <h2 className="font-display mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+              How this round scores
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{rules}</p>
           </section>
 
-          {/* HOW TO PLAY */}
-          <section className="mb-20 md:mb-28 text-center">
-            <h2 className="text-base font-bold text-slate-900 dark:text-white md:text-lg">
-              {(HOW_TO_PLAY[modeKey] ?? HOW_TO_PLAY.game).title}
+          <section className="panel-card p-6">
+            <div className="section-eyebrow">How to play</div>
+            <h2 className="font-display mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+              {howToPlay.title}
             </h2>
-            <ol className="mx-auto mt-6 max-w-2xl list-decimal space-y-4 pl-6 text-left text-sm leading-relaxed text-slate-700 dark:text-slate-200 md:text-base">
-              {((HOW_TO_PLAY[modeKey] ?? HOW_TO_PLAY.game).steps as string[]).map((step, i) => (
-                <li key={i}>{step}</li>
+            <ol className="mt-4 space-y-4">
+              {howToPlay.steps.map((step, index) => (
+                <li key={index} className="metric-card">
+                  <div className="flex items-start gap-3">
+                    <span className="rounded-full bg-[var(--accent-soft)] px-2.5 py-1 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[var(--foreground)]">
+                      0{index + 1}
+                    </span>
+                    <p className="text-sm leading-7 text-[var(--muted)]">{step}</p>
+                  </div>
+                </li>
               ))}
             </ol>
           </section>
-        </div>
+
+          <section className="panel-card p-6">
+            <div className="section-eyebrow">Daily setup</div>
+            <h2 className="font-display mt-3 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+              Round timing and metadata
+            </h2>
+            <div className="mt-4 grid gap-3">
+              <CalendarDateCard puzzleKey={daily.puzzleKey} />
+              <NextGameCountdown />
+            </div>
+          </section>
+        </aside>
       </div>
+
+      <section className="app-frame px-6 py-8 md:px-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-2xl">
+            <div className="section-eyebrow">More games</div>
+            <h2 className="font-display mt-3 text-3xl font-semibold tracking-tight text-[var(--foreground)]">
+              Same flow, different clue language
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+              Jump between modes without relearning the interface.
+            </p>
+          </div>
+          <Link href="/" className="secondary-button">
+            Back to mode overview
+          </Link>
+        </div>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {otherModes.map((item) => (
+            <Link
+              key={item.key}
+              href={item.href}
+              className="panel-card-strong p-6 hover:-translate-y-1"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="rounded-full bg-[var(--accent-cool-soft)] px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-[var(--foreground)]">
+                  {item.badge}
+                </span>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                  Open
+                </span>
+              </div>
+              <h3 className="font-display mt-5 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                {item.label}
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{item.description}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
-

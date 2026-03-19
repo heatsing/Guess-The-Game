@@ -1,26 +1,26 @@
 export const ABOUT_GAME: Record<string, string> = {
   game:
-    "The game presents players with a sequence of images from a video game, revealed one by one. Players must identify the game using up to six guesses; each wrong guess unlocks the next, clearer image. Every puzzle uses six clue images, from blurriest to clearest. Regular play sharpens recognition of art styles, UI, and iconic game moments.",
+    "Guess The Game is a daily recognition challenge built around art direction, UI fragments, and iconic moments from video games. Each wrong answer reveals a cleaner image, so the round becomes a tradeoff between confidence and more information.",
   book:
-    "The game presents players with images from a book—covers, quotes, or scenes—revealed step by step. Players must identify the book or author using up to six guesses; each wrong guess unlocks the next clue. Every puzzle offers six images to narrow down the title. Regular play improves literary recognition and memory of classic and popular works.",
+    "Guess The Book turns covers, quotes, and scene references into a daily puzzle. The structure rewards readers who can identify a title from tone and small visual hints before the clearest clue appears.",
   movie:
-    "The game presents players with frames, posters, or props from a movie, revealed one at a time. Players must name the film using up to six guesses; each wrong guess unlocks the next image. Every puzzle has six clues from trickiest to clearest. Regular play sharpens visual recall and familiarity with cinema.",
+    "Guess The Movie is a lightweight film-recognition loop. Each round uses frames, props, or poster details to test how quickly you can move from a partial image to the exact movie.",
   logo:
-    "The game presents players with zoomed-in or cropped parts of brand logos, revealed step by step. Players must identify the brand using up to six guesses; each wrong guess reveals more of the logo. Every puzzle uses six partial views. Regular play improves recognition of familiar brands and visual details.",
+    "Guess The Logo focuses on brand recognition under constraint. Tight crops become full marks over time, which makes the mode about noticing shapes, spacing, and visual memory.",
   house:
-    "The game presents players with architecture and interior images from famous buildings or houses, revealed one by one. Players must identify the place or architect using up to six guesses; each wrong guess unlocks the next clue. Every puzzle has six images. Regular play deepens familiarity with design and landmarks.",
+    "Guess The House is built around architecture, interiors, and places with strong visual identity. It works well when you recognize a location from one detail before the broader view opens up.",
   angle:
-    "The game presents players with extreme close-ups or unusual angles of an object or scene, revealed step by step. Players must guess what they are seeing using up to six guesses; each wrong guess unlocks a clearer image. Every puzzle uses six clues. Regular play trains visual reasoning and perspective.",
+    "Guess The Angle pushes perspective and pattern recognition harder than the other modes. Extreme crops and odd camera positions force you to reason from texture, contour, and context.",
   phrase:
-    "The game presents players with visual puzzles and rebus-style clues for a phrase or idiom, revealed one at a time. Players must guess the phrase using up to six guesses; each wrong guess unlocks the next clue. Every puzzle has six images. Regular play strengthens lateral thinking and language connections.",
+    "Guess The Phrase uses visual logic instead of pure recognition. Each clue nudges you toward a familiar phrase or idiom, so the challenge is as much interpretation as memory.",
   song:
-    "The game presents players with album art, lyrics, or music video frames, revealed step by step. Players must identify the song or artist using up to six guesses; each wrong guess unlocks the next clue. Every puzzle has six clues. Regular play improves recognition of music and visual culture.",
+    "Guess The Song blends musical recall with visual cues such as album art or lyric fragments. It is strongest when one small hint instantly connects to a specific track.",
   animal:
-    "The game presents players with silhouettes, habitats, or close-ups of an animal, revealed one by one. Players must name the animal using up to six guesses; each wrong guess unlocks the next image. Every puzzle has six clues. Regular play sharpens observation and knowledge of wildlife.",
+    "Guess The Animal leans on silhouette, habitat, and texture clues. The mode rewards players who can move quickly from broad categories to a precise species.",
   plant:
-    "The game presents players with leaves, flowers, or textures from a plant, revealed step by step. Players must identify the plant using up to six guesses; each wrong guess unlocks the next clue. Every puzzle has six images. Regular play improves botanical recognition and attention to detail.",
+    "Guess The Plant turns botanical details into a daily recognition game. Leaves, flowers, and stems gradually reveal enough structure to identify the plant with confidence.",
   number:
-    "The game presents players with logic hints and visual clues that narrow down a secret number. Players must find the number using up to six guesses; each wrong guess can reveal more information. Every puzzle has a unique solution. Regular play strengthens logical reasoning and number sense.",
+    "Guess The Number swaps pure visual recall for deduction. It is a compact daily logic round where each clue reduces uncertainty around a single exact value.",
   price:
-    "The game presents players with image clues related to today’s mystery price. Players must guess the price using up to six attempts; each wrong guess can unlock more hints. Every puzzle has one correct answer. Regular play sharpens estimation and context-based reasoning.",
+    "Guess The Price is an estimation challenge with reveal management. Each extra clue helps you calibrate the answer, but the cleanest wins come from solving before the full context is visible.",
 };

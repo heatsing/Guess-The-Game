@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDailyForMode, isModeKey } from "@/lib/getDailyForMode";
+import { getDailyForModeSmart, isModeKey } from "@/lib/getDailyForMode";
 import { isCorrectGuess } from "@/lib/gameEngine";
 
 export async function POST(req: NextRequest) {
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Empty guess" }, { status: 400 });
   }
 
-  const daily = getDailyForMode(mode);
+  const daily = await getDailyForModeSmart(mode);
   const correct = isCorrectGuess(daily, guess);
 
   return NextResponse.json({

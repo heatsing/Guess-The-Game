@@ -1,18 +1,40 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import FAQSection from "@/components/FAQSection";
 import AboutSection from "@/components/AboutSection";
+import { MODES } from "@/lib/modes";
+
+const bodyFont = Manrope({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const displayFont = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "GuessTheGame",
-  description: "Guess the video game from a few images.",
+  title: {
+    default: "GuessTheGame",
+    template: "%s | GuessTheGame",
+  },
+  description: "Daily visual puzzle challenges across games, movies, logos, books, and more.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${bodyFont.variable} ${displayFont.variable}`}
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -21,60 +43,94 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-dvh antialiased">
-        <div className="sticky top-0 z-40 w-screen border-b border-yellow-500 bg-[#facc15] text-slate-900">
-          <div className="mx-auto flex h-11 max-w-6xl items-center justify-center gap-3 px-3 text-sm font-semibold md:gap-6 md:text-base">
-            <a href="/game" className="rounded-md px-3 py-1 hover:bg-yellow-400/70">🎯 Daily ▾</a>
-            <a href="/game" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">📅</a>
-            <a href="/price" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">💰</a>
-            <a href="/game" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">🏆</a>
-            <a href="/game" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">📊</a>
-            <a href="#faq" className="rounded-md px-2.5 py-1 hover:bg-yellow-400/70">❓</a>
-          </div>
-        </div>
+        <div className="mx-auto max-w-7xl px-4 pb-16 pt-5 sm:px-6 lg:px-8">
+          <header className="sticky top-4 z-40 mb-8">
+            <div className="app-frame px-4 py-4 md:px-6">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                <Link href="/" className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-[20px] border border-white/70 bg-white/80 p-2 shadow-[0_12px_24px_rgba(15,23,42,0.1)] dark:border-white/10 dark:bg-white/5">
+                    <Image
+                      src="/logo.png"
+                      alt="Guess The Game logo"
+                      width={88}
+                      height={88}
+                      className="h-10 w-10 object-contain"
+                      priority
+                    />
+                  </div>
+                  <div>
+                    <div className="section-eyebrow">Daily Visual Puzzle Arcade</div>
+                    <div className="font-display text-xl font-semibold tracking-tight text-[var(--foreground)] md:text-2xl">
+                      GuessTheGame
+                    </div>
+                  </div>
+                </Link>
 
-        <div className="mx-auto max-w-6xl px-4 py-6">
-          <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
-            <a href="/" className="flex items-center gap-3">
-              <Image
-                src="/logo.png"
-                alt="Guess The Game logo"
-                width={88}
-                height={88}
-                className="h-14 w-14 object-contain md:h-16 md:w-16"
-                priority
-              />
-              <div>
-                <div className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">GuessTheGame</div>
-                <div className="text-sm text-slate-800 dark:text-slate-200">Play daily visual guessing challenges.</div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Link href="/game" className="primary-button px-4 py-2.5">
+                    Play today's puzzle
+                  </Link>
+                  <Link href="/faq" className="secondary-button hidden px-4 py-2.5 sm:inline-flex">
+                    FAQ
+                  </Link>
+                  <ThemeToggle />
+                </div>
               </div>
-            </a>
-            <nav className="flex items-center gap-2">
-              <ThemeToggle />
-              <a
-                className="rounded-lg border border-line bg-card px-3 py-2 text-sm font-medium text-slate-900 shadow-sm hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:hover:bg-slate-600"
-                href="/game">
-                Play today&apos;s game
-              </a>
-            </nav>
-          </header>
-          {children}
-          <FAQSection />
-          <AboutSection />
-          <footer className="mt-12 w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] border-t border-slate-200 bg-slate-200/60 py-8 dark:border-slate-600 dark:bg-slate-900/90">
-            <div className="mx-auto flex flex-col items-center justify-center gap-3 text-center text-sm">
-              <span className="text-slate-800 dark:text-slate-200">© {new Date().getFullYear()} GuessTheGame.com</span>
-              <nav className="flex items-center gap-2 text-slate-800 dark:text-slate-200">
-                <a href="/faq" className="hover:text-slate-900 dark:hover:text-white">FAQ</a>
-                <span className="text-slate-500 dark:text-slate-400">|</span>
-                <a href="/terms" className="hover:text-slate-900 dark:hover:text-white">Terms</a>
-                <span className="text-slate-500 dark:text-slate-400">|</span>
-                <a href="/privacy" className="hover:text-slate-900 dark:hover:text-white">Privacy</a>
-                <span className="text-slate-500 dark:text-slate-400">|</span>
-                <a href="/contact" className="hover:text-slate-900 dark:hover:text-white">Contact</a>
+
+              <nav className="-mx-1 mt-4 flex gap-2 overflow-x-auto pb-1">
+                {MODES.map((mode) => (
+                  <Link key={mode.key} href={mode.href} className="nav-chip">
+                    <span className="rounded-full bg-[var(--accent-soft)] px-2 py-1 text-[0.65rem] tracking-[0.24em] text-[var(--foreground)]">
+                      {mode.badge}
+                    </span>
+                    <span>{mode.shortLabel}</span>
+                  </Link>
+                ))}
               </nav>
-              <p className="max-w-md text-slate-800 dark:text-slate-200">
-                GuessTheGame.com is not affiliated with &apos;Guess the Game&apos; by guessthe.game in any way.
-              </p>
+            </div>
+          </header>
+
+          {children}
+
+          <div className="mt-16 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <FAQSection />
+            <AboutSection />
+          </div>
+
+          <footer className="mt-10 pb-6">
+            <div className="app-frame px-6 py-6">
+              <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                <div className="max-w-2xl">
+                  <div className="section-eyebrow">Built for a daily habit</div>
+                  <div className="font-display mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
+                    Six clues. One clean answer. Back tomorrow.
+                  </div>
+                  <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+                    New puzzles unlock every day at 00:00 UTC. Results and streaks stay on this
+                    device for each mode.
+                  </p>
+                </div>
+
+                <nav className="flex flex-wrap gap-2">
+                  <Link href="/" className="secondary-button px-4 py-2.5">
+                    Home
+                  </Link>
+                  <Link href="/game" className="secondary-button px-4 py-2.5">
+                    Daily challenge
+                  </Link>
+                  <Link href="/price" className="secondary-button px-4 py-2.5">
+                    Guess The Price
+                  </Link>
+                  <Link href="/faq" className="secondary-button px-4 py-2.5">
+                    FAQ
+                  </Link>
+                </nav>
+              </div>
+
+              <div className="mt-6 flex flex-col gap-2 border-t border-[color:var(--border)] pt-4 text-xs text-[var(--muted)] md:flex-row md:items-center md:justify-between">
+                <span>Copyright {new Date().getFullYear()} GuessTheGame</span>
+                <span>Independent fan project. Not affiliated with guessthe.game.</span>
+              </div>
             </div>
           </footer>
         </div>
@@ -82,4 +138,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
-

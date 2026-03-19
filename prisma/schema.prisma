@@ -1,9 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -11,22 +7,39 @@ datasource db {
 }
 
 model Game {
-  id                String       @id @default(cuid())
-  slug              String       @unique
-  title             String
-  acceptableAnswers String       @default("[]") // JSON 字符串，代码里解析
-  images            GameImage[]
-  createdAt         DateTime     @default(now())
+  id         String     @id @default(uuid())
+  answer     String
+  imageUrl   String
+  hints      Json
+  difficulty Int
+  createdAt  DateTime   @default(now())
+
+  dailyGames DailyGame[]
+  guesses    UserGuess[]
 }
 
-model GameImage {
-  id      String @id @default(cuid())
-  game    Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  gameId  String
-  order   Int
-  url     String
+model DailyGame {
+  id     String   @id @default(uuid())
+  gameId String
+  date   DateTime
 
-  @@unique([gameId, order])
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([date])
+  @@index([gameId])
+}
+
+model UserGuess {
+  id        String   @id @default(uuid())
+  userId    String
+  gameId    String
+  guess     String
+  isCorrect Boolean
+  createdAt DateTime @default(now())
+
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
   @@index([gameId])
 }
 
