@@ -1,22 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Manrope, Space_Grotesk } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import FAQSection from "@/components/FAQSection";
 import AboutSection from "@/components/AboutSection";
 import { MODES } from "@/lib/modes";
 
-const bodyFont = Manrope({
+const siteFont = Nunito({
   subsets: ["latin"],
   variable: "--font-sans",
-  display: "swap",
-});
-
-const displayFont = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-display",
   display: "swap",
 });
 
@@ -28,13 +22,13 @@ export const metadata: Metadata = {
   description: "Daily visual puzzle challenges across games, movies, logos, books, and more.",
 };
 
+const FEATURED_MODE_KEYS = ["game", "price", "movie", "book"];
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const featuredModes = MODES.filter((mode) => FEATURED_MODE_KEYS.includes(mode.key));
+
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${bodyFont.variable} ${displayFont.variable}`}
-    >
+    <html lang="en" suppressHydrationWarning className={siteFont.variable}>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -43,93 +37,104 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-dvh antialiased">
-        <div className="mx-auto max-w-7xl px-4 pb-16 pt-5 sm:px-6 lg:px-8">
-          <header className="sticky top-4 z-40 mb-8">
-            <div className="app-frame px-4 py-4 md:px-6">
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                <Link href="/" className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-[20px] border border-white/70 bg-white/80 p-2 shadow-[0_12px_24px_rgba(15,23,42,0.1)] dark:border-white/10 dark:bg-white/5">
-                    <Image
-                      src="/logo.png"
-                      alt="Guess The Game logo"
-                      width={88}
-                      height={88}
-                      className="h-10 w-10 object-contain"
-                      priority
-                    />
-                  </div>
-                  <div>
-                    <div className="section-eyebrow">Daily Visual Puzzle Arcade</div>
-                    <div className="font-display text-xl font-semibold tracking-tight text-[var(--foreground)] md:text-2xl">
-                      GuessTheGame
-                    </div>
-                  </div>
-                </Link>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link href="/game" className="primary-button px-4 py-2.5">
-                    Play today's puzzle
-                  </Link>
-                  <Link href="/faq" className="secondary-button hidden px-4 py-2.5 sm:inline-flex">
-                    FAQ
-                  </Link>
-                  <ThemeToggle />
+        <div className="mx-auto max-w-6xl px-4 pb-12 pt-4 sm:px-6 lg:px-8">
+          <div className="app-frame mb-5 px-4 py-4 md:px-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <div className="section-eyebrow">More daily puzzle modes</div>
+                <div className="mt-2 text-lg font-extrabold text-[var(--foreground)] md:text-xl">
+                  Jump between visual guessing games without leaving the same flow.
                 </div>
               </div>
-
-              <nav className="-mx-1 mt-4 flex gap-2 overflow-x-auto pb-1">
-                {MODES.map((mode) => (
-                  <Link key={mode.key} href={mode.href} className="nav-chip">
-                    <span className="rounded-full bg-[var(--accent-soft)] px-2 py-1 text-[0.65rem] tracking-[0.24em] text-[var(--foreground)]">
-                      {mode.badge}
-                    </span>
-                    <span>{mode.shortLabel}</span>
+              <div className="flex flex-wrap gap-2">
+                {featuredModes.map((mode) => (
+                  <Link key={mode.key} href={mode.href} className="secondary-button px-4 py-2.5">
+                    {mode.label}
                   </Link>
                 ))}
-              </nav>
+              </div>
             </div>
+          </div>
+
+          <header className="mb-8">
+            <div className="text-center">
+              <Link href="/" className="inline-flex flex-col items-center gap-4">
+                <div className="flex h-20 w-20 items-center justify-center rounded-[22px] border-2 border-black/80 bg-white p-3 shadow-[0_10px_24px_rgba(0,0,0,0.08)] dark:border-white/20 dark:bg-[var(--surface)]">
+                  <Image
+                    src="/logo.png"
+                    alt="Guess The Game logo"
+                    width={88}
+                    height={88}
+                    className="h-14 w-14 object-contain"
+                    priority
+                  />
+                </div>
+                <div>
+                  <div className="section-eyebrow">Daily image puzzle</div>
+                  <div className="font-display mt-2 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
+                    GuessTheGame
+                  </div>
+                  <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">
+                    Guess the answer from six image clues, save your streak locally, and come back
+                    tomorrow for a fresh round.
+                  </p>
+                </div>
+              </Link>
+
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+                <Link href="/game" className="primary-button">
+                  Play today's game
+                </Link>
+                <Link href="/faq" className="secondary-button">
+                  Read the rules
+                </Link>
+                <ThemeToggle />
+              </div>
+            </div>
+
+            <nav className="mt-6 flex gap-2 overflow-x-auto pb-1">
+              {MODES.map((mode) => (
+                <Link key={mode.key} href={mode.href} className="nav-chip">
+                  <span className="rounded-lg bg-[var(--accent-soft)] px-2 py-1 text-[0.65rem] text-[var(--foreground)]">
+                    {mode.badge}
+                  </span>
+                  <span>{mode.shortLabel}</span>
+                </Link>
+              ))}
+            </nav>
           </header>
 
           {children}
 
-          <div className="mt-16 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="mt-14 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
             <FAQSection />
             <AboutSection />
           </div>
 
           <footer className="mt-10 pb-6">
-            <div className="app-frame px-6 py-6">
-              <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-                <div className="max-w-2xl">
-                  <div className="section-eyebrow">Built for a daily habit</div>
-                  <div className="font-display mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
-                    Six clues. One clean answer. Back tomorrow.
-                  </div>
-                  <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                    New puzzles unlock every day at 00:00 UTC. Results and streaks stay on this
-                    device for each mode.
-                  </p>
-                </div>
+            <div className="app-frame px-6 py-6 text-center">
+              <div className="text-2xl font-extrabold text-[var(--foreground)]">Do you like GuessTheGame?</div>
+              <p className="mx-auto mt-3 max-w-3xl text-sm leading-7 text-[var(--muted)] md:text-base">
+                GuessTheGame is a daily visual puzzle where every wrong answer reveals a clearer
+                clue. It is designed to be quick to start, easy to revisit, and strong enough to
+                support multiple categories with the same simple rules.
+              </p>
 
-                <nav className="flex flex-wrap gap-2">
-                  <Link href="/" className="secondary-button px-4 py-2.5">
-                    Home
-                  </Link>
-                  <Link href="/game" className="secondary-button px-4 py-2.5">
-                    Daily challenge
-                  </Link>
-                  <Link href="/price" className="secondary-button px-4 py-2.5">
-                    Guess The Price
-                  </Link>
-                  <Link href="/faq" className="secondary-button px-4 py-2.5">
-                    FAQ
-                  </Link>
-                </nav>
-              </div>
+              <nav className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm font-bold text-[var(--foreground)]">
+                <Link href="/" className="secondary-button px-4 py-2.5">
+                  Home
+                </Link>
+                <Link href="/game" className="secondary-button px-4 py-2.5">
+                  Daily challenge
+                </Link>
+                <Link href="/faq" className="secondary-button px-4 py-2.5">
+                  FAQ
+                </Link>
+              </nav>
 
-              <div className="mt-6 flex flex-col gap-2 border-t border-[color:var(--border)] pt-4 text-xs text-[var(--muted)] md:flex-row md:items-center md:justify-between">
-                <span>Copyright {new Date().getFullYear()} GuessTheGame</span>
-                <span>Independent fan project. Not affiliated with guessthe.game.</span>
+              <div className="mt-6 border-t border-[color:var(--border)] pt-4 text-sm text-[var(--muted)]">
+                <div>Copyright {new Date().getFullYear()} GuessTheGame</div>
+                <div className="mt-2">GuessTheGame is not affiliated with guessthe.game in any way.</div>
               </div>
             </div>
           </footer>

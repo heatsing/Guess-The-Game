@@ -25,21 +25,26 @@ export const getSanityDailyForMode = unstable_cache(
     if (!sanityClient) return null;
 
     const iso = toIsoDateUTC(date);
-    const res = (await sanityClient.fetch(DAILY_GAME_QUERY, { date: iso, mode })) as SanityDaily;
-    if (!res?.game?._id) return null;
+    try {
+      const res = (await sanityClient.fetch(DAILY_GAME_QUERY, { date: iso, mode })) as SanityDaily;
+      if (!res?.game?._id) return null;
 
-    const images = (res.game.images ?? []).filter(Boolean) as string[];
-    if (!images.length) return null;
+      const images = (res.game.images ?? []).filter(Boolean) as string[];
+      if (!images.length) return null;
 
-    return {
-      id: res.game._id,
-      slug: res.game._id,
-      title: res.game.title,
-      acceptableAnswers: Array.isArray(res.game.acceptableAnswers) ? res.game.acceptableAnswers : undefined,
-      images,
-      puzzleKey: iso,
-      maxGuesses: 6,
-    };
+      return {
+        id: res.game._id,
+        slug: res.game._id,
+        title: res.game.title,
+        acceptableAnswers: Array.isArray(res.game.acceptableAnswers) ? res.game.acceptableAnswers : undefined,
+        images,
+        puzzleKey: iso,
+        maxGuesses: 6,
+      };
+    } catch {
+      // If Sanity isn't reachable or query fails, fall back to JSON.
+      return null;
+    }
   },
   ["sanity:daily:v1"],
   { revalidate: 60 }
@@ -48,9 +53,15 @@ export const getSanityDailyForMode = unstable_cache(
 export const getSanityTitlesForMode = unstable_cache(
   async (mode: string): Promise<string[] | null> => {
     if (!sanityClient) return null;
-    const rows = (await sanityClient.fetch(ALL_TITLES_QUERY, { mode })) as Array<{ title?: string }>;
-    const titles = rows.map((r) => r.title).filter((t): t is string => typeof t === "string" && t.trim().length > 0);
-    return titles.length ? titles : [];
+    try {
+      const rows = (await sanityClient.fetch(ALL_TITLES_QUERY, { mode })) as Array<{ title?: string }>;
+      const titles = rows
+        .map((r) => r.title)
+        .filter((t): t is string => typeof t === "string" && t.trim().length > 0);
+      return titles.length ? titles : [];
+    } catch {
+      return null;
+    }
   },
   ["sanity:titles:v1"],
   { revalidate: 300 }

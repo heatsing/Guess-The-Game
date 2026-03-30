@@ -45,10 +45,10 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      className="inline-flex items-center gap-3 rounded-full border border-[color:var(--border)] bg-[var(--surface-strong)] px-3 py-2 text-[var(--foreground)]"
+      className="inline-flex items-center gap-3 rounded-xl border-2 border-black bg-[var(--surface)] px-4 py-3 text-[var(--foreground)] dark:border-[color:var(--border-strong)]"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
-      <span className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+      <span className="text-[0.7rem] font-extrabold uppercase tracking-[0.2em] text-[var(--muted)]">
         Theme
       </span>
       <span className="relative h-6 w-11 rounded-full bg-[var(--accent-soft)]">
@@ -58,7 +58,7 @@ export default function ThemeToggle() {
           }`}
         />
       </span>
-      <span className="text-sm font-semibold">{isDark ? "Dark" : "Light"}</span>
+      <span className="text-sm font-extrabold">{isDark ? "Dark" : "Light"}</span>
     </button>
   );
 }
