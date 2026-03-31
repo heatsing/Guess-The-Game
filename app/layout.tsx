@@ -106,35 +106,70 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           {children}
 
-          <div className="mt-14 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="mt-14 flex flex-col gap-6">
             <FAQSection />
             <AboutSection />
           </div>
 
-          <footer className="mt-10 pb-6">
-            <div className="app-frame px-6 py-6 text-center">
-              <div className="text-2xl font-extrabold text-[var(--foreground)]">Do you like GuessTheGame?</div>
-              <p className="mx-auto mt-3 max-w-3xl text-sm leading-7 text-[var(--muted)] md:text-base">
-                GuessTheGame is a daily visual puzzle where every wrong answer reveals a clearer
-                clue. It is designed to be quick to start, easy to revisit, and strong enough to
-                support multiple categories with the same simple rules.
-              </p>
+          <footer className="mt-12 pb-6">
+            <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen border-y-2 border-black/80 bg-[var(--accent-soft)] dark:border-[color:var(--border-strong)] dark:bg-[var(--background-strong)]">
+              <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+                <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+                  <div>
+                    <div className="section-eyebrow">Daily visual puzzle</div>
+                    <div className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
+                      GuessTheGame
+                    </div>
+                    <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">
+                      A fast daily puzzle built around six image clues, simple rules, and a format
+                      that works across games, books, movies, logos, and more.
+                    </p>
 
-              <nav className="mt-5 flex flex-wrap items-center justify-center gap-2 text-sm font-bold text-[var(--foreground)]">
-                <Link href="/" className="secondary-button px-4 py-2.5">
-                  Home
-                </Link>
-                <Link href="/game" className="secondary-button px-4 py-2.5">
-                  Daily challenge
-                </Link>
-                <Link href="/faq" className="secondary-button px-4 py-2.5">
-                  FAQ
-                </Link>
-              </nav>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <Link href="/game" className="primary-button">
+                        Play today's challenge
+                      </Link>
+                      <Link href="/faq" className="secondary-button">
+                        Read the FAQ
+                      </Link>
+                    </div>
+                  </div>
 
-              <div className="mt-6 border-t border-[color:var(--border)] pt-4 text-sm text-[var(--muted)]">
-                <div>Copyright {new Date().getFullYear()} GuessTheGame</div>
-                <div className="mt-2">GuessTheGame is not affiliated with guessthe.game in any way.</div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="metric-card">
+                      <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Daily reset</div>
+                      <div className="mt-2 text-2xl font-extrabold text-[var(--foreground)]">00:00 UTC</div>
+                      <div className="mt-2 text-sm leading-7 text-[var(--muted)]">A fresh puzzle arrives every day.</div>
+                    </div>
+                    <div className="metric-card">
+                      <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Progress</div>
+                      <div className="mt-2 text-2xl font-extrabold text-[var(--foreground)]">Local</div>
+                      <div className="mt-2 text-sm leading-7 text-[var(--muted)]">Streaks and results stay on this device.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex flex-col gap-4 border-t border-black/15 pt-5 dark:border-[color:var(--border)] lg:flex-row lg:items-center lg:justify-between">
+                  <nav className="flex flex-wrap items-center gap-2 text-sm font-bold text-[var(--foreground)]">
+                    <Link href="/" className="secondary-button px-4 py-2.5">
+                      Home
+                    </Link>
+                    <Link href="/game" className="secondary-button px-4 py-2.5">
+                      Daily challenge
+                    </Link>
+                    <Link href="/faq" className="secondary-button px-4 py-2.5">
+                      FAQ
+                    </Link>
+                    <Link href="/price" className="secondary-button px-4 py-2.5">
+                      Guess The Price
+                    </Link>
+                  </nav>
+
+                  <div className="text-sm leading-7 text-[var(--muted)] lg:text-right">
+                    <div>Copyright {new Date().getFullYear()} GuessTheGame</div>
+                    <div>GuessTheGame is not affiliated with guessthe.game in any way.</div>
+                  </div>
+                </div>
               </div>
             </div>
           </footer>
