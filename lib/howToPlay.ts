@@ -15,9 +15,9 @@ export const HOW_TO_PLAY: Record<string, HowToPlay> = {
   book: {
     title: "How to play Guess The Book",
     steps: [
-      "Start with the first clue, which may be a cover, quote, or scene tied to the book.",
-      "Type the title or accepted author answer. Each wrong guess reveals the next clue.",
-      "You have up to 6 guesses, so use the growing context to narrow down the book before the last reveal.",
+      "Start with the first clue. It might be a cover crop, a scene, an object, or another visual detail connected to the book.",
+      "Type the book title and submit your guess. If that answer is not correct, the next clue unlocks and gives you more context.",
+      "You have up to 6 guesses total, so try to solve the book before the clearest clue appears. Some puzzles may also accept an alternate title or author when that answer is included in our list.",
     ],
   },
   movie: {

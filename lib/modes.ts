@@ -22,7 +22,7 @@ export const MODES: Mode[] = [
     shortLabel: "Book",
     badge: "BK",
     href: "/book",
-    description: "Covers, quotes, and scenes that narrow down a single book.",
+    description: "Try to guess today's book in 6 guesses or less using covers, scenes, and story clues.",
   },
   {
     key: "movie",

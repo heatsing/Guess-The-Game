@@ -24,6 +24,21 @@ const GENERIC_FAQS = [
   },
 ];
 
+const MODE_SPECIFIC_FAQS: Record<string, { question: string; answer: string }[]> = {
+  book: [
+    {
+      question: "What kinds of clues appear in Guess The Book?",
+      answer:
+        "Book puzzles usually rely on visual references such as cover crops, title styling, scenes, symbolic objects, or story-related details. The clue order is designed to start vague and become easier over time.",
+    },
+    {
+      question: "Can author names count as correct guesses?",
+      answer:
+        "Some book puzzles may accept the author or an alternate title when that answer is included in the accepted answer list. If the author is not configured as an accepted answer for that puzzle, the guess will not count.",
+    },
+  ],
+};
+
 function getModeKeyFromPath(pathname: string): string {
   const firstSegment = pathname.split("/").filter(Boolean)[0];
   return MODES.find((mode) => mode.key === firstSegment)?.key ?? "game";
@@ -59,8 +74,13 @@ export default function FAQSection() {
   const mode = MODES.find((item) => item.key === modeKey);
   const label = mode?.label ?? "Guess The Game";
   const gameRulesText = GAME_RULES[modeKey] ?? GAME_RULES.game;
+  const modeSpecificFaqs = MODE_SPECIFIC_FAQS[modeKey] ?? [];
 
-  const faqItems = [{ question: `${label} rules`, answer: gameRulesText }, ...GENERIC_FAQS];
+  const faqItems = [
+    { question: `${label} rules`, answer: gameRulesText },
+    ...modeSpecificFaqs,
+    ...GENERIC_FAQS,
+  ];
 
   return (
     <section id="faq" className="app-frame px-6 py-8">

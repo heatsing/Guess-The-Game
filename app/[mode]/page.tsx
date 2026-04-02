@@ -3,6 +3,8 @@ import { MODES } from "@/lib/modes";
 import { getDailyForModeSmart, isModeKey } from "@/lib/getDailyForMode";
 import ModePage from "@/components/ModePage";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return MODES.map((m) => ({ mode: m.key }));
 }

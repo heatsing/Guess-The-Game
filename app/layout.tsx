@@ -8,6 +8,12 @@ import FAQSection from "@/components/FAQSection";
 import AboutSection from "@/components/AboutSection";
 import { MODES } from "@/lib/modes";
 
+// App Router equivalent of project-wide getStaticProps/ISR.
+// If you want getServerSideProps-like behavior instead, switch this to:
+// export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
+export const revalidate = 60;
+
 const siteFont = Nunito({
   subsets: ["latin"],
   variable: "--font-sans",

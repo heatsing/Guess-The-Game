@@ -2,7 +2,7 @@ export const GAME_RULES: Record<string, string> = {
   game:
     "You are shown a sequence of images revealed step by step. Each wrong guess unlocks the next, clearer image. You have up to 6 guesses to identify the video game. All 6 images act as clues, moving from blurriest to clearest.",
   book:
-    "You are shown a sequence of clues for a book. Each wrong guess unlocks the next clue, and you have up to 6 guesses to identify the title or accepted author answer.",
+    "You are shown a sequence of visual clues for one book and you have up to 6 guesses to solve it. Clues may include cover details, scenes, objects, typography, or other recognizable references tied to the story. Each wrong guess unlocks the next clue, going from harder to easier. The goal is to identify the book title in 6 guesses or less, although some puzzles may also accept alternate titles or author names when they are included in the answer list.",
   movie:
     "You are shown a sequence of frames, props, or posters. Each wrong guess reveals the next clue, and you have up to 6 guesses to identify the movie.",
   logo:

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDailyForModeSmart, isModeKey } from "@/lib/getDailyForMode";
 
+export const dynamic = "force-static";
+export const revalidate = 60;
+
 export async function GET(req: NextRequest) {
   const mode = req.nextUrl.searchParams.get("mode") ?? "game";
 
@@ -11,4 +14,3 @@ export async function GET(req: NextRequest) {
   const daily = await getDailyForModeSmart(mode);
   return NextResponse.json(daily);
 }
-

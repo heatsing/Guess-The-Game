@@ -2,7 +2,7 @@ export const ABOUT_GAME: Record<string, string> = {
   game:
     "Guess The Game is a daily recognition challenge built around art direction, UI fragments, and iconic moments from video games. Each wrong answer reveals a cleaner image, so the round becomes a tradeoff between confidence and more information.",
   book:
-    "Guess The Book turns covers, quotes, and scene references into a daily puzzle. The structure rewards readers who can identify a title from tone and small visual hints before the clearest clue appears.",
+    "Guess The Book is a daily book guessing puzzle built around visual recognition rather than long text prompts. Each round asks you to identify one title from a sequence of clues that can include cover art, scene details, symbols, objects, or recognizable design elements. Because every wrong guess reveals another clue, the mode rewards readers who can connect a small detail to a book before the final reveal makes the answer obvious.",
   movie:
     "Guess The Movie is a lightweight film-recognition loop. Each round uses frames, props, or poster details to test how quickly you can move from a partial image to the exact movie.",
   logo:
