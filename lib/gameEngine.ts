@@ -1,16 +1,8 @@
 import type { DailyGame } from "@/lib/gameTypes";
-import { normalizeAnswer } from "@/lib/gameTypes";
+import { isAnswerAcceptable } from "@/lib/gameTypes";
 
 export function isCorrectGuess(game: DailyGame, rawGuess: string): boolean {
-  const normalizedGuess = normalizeAnswer(rawGuess);
-  if (!normalizedGuess) return false;
-
-  const acceptedAnswers = new Set<string>([
-    normalizeAnswer(game.title),
-    ...(game.acceptableAnswers ?? []).map(normalizeAnswer),
-  ]);
-
-  return acceptedAnswers.has(normalizedGuess);
+  return isAnswerAcceptable(rawGuess, game.title, game.acceptableAnswers ?? []);
 }
 
 export function buildShareText(args: {
