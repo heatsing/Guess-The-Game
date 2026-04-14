@@ -1,15 +1,16 @@
 [
   {
-    "id": "book-demo-1",
-    "title": "Demo Book",
-    "acceptableAnswers": ["demo book"],
+    "id": "demo-harry-potter",
+    "slug": "/works/OL104643W",
+    "title": "Harry Potter and the Philosopher's Stone",
+    "acceptableAnswers": ["harry potter", "哈利波特"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://covers.openlibrary.org/b/id/10313983-L.jpg",
+      "https://covers.openlibrary.org/b/id/10313983-L.jpg",
+      "https://covers.openlibrary.org/b/id/10313983-L.jpg",
+      "https://covers.openlibrary.org/b/id/10313983-L.jpg",
+      "https://covers.openlibrary.org/b/id/10313983-L.jpg",
+      "https://covers.openlibrary.org/b/id/10313983-L.jpg"
     ]
   }
 ]

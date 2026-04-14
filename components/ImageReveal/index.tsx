@@ -18,9 +18,9 @@ export default function ImageReveal({ images, unlockedCount }: Props) {
   }, [images, safeUnlocked]);
 
   return (
-    <section className="app-frame p-4 md:p-5">
+    <section className="app-frame p-3 md:p-4">
       <div className="relative overflow-hidden rounded-[28px] border border-[color:var(--border)] bg-black/10">
-        <div className="absolute z-10 flex flex-wrap gap-2 p-4">
+        <div className="absolute z-10 flex flex-wrap gap-2 p-3">
           <span className="rounded-full bg-black/60 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur">
             Current clue {safeUnlocked}/{totalClues}
           </span>
@@ -43,39 +43,24 @@ export default function ImageReveal({ images, unlockedCount }: Props) {
         </div>
       </div>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1">
         {Array.from({ length: totalClues }).map((_, index) => {
           const clueNumber = index + 1;
           const unlocked = clueNumber <= safeUnlocked;
           const active = clueNumber === safeUnlocked;
-
           return (
-            <div
+            <span
               key={clueNumber}
-              className={`rounded-[22px] border p-4 ${
+              className={`inline-flex min-w-[5.5rem] items-center justify-center rounded-full border px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] ${
                 active
-                  ? "border-[color:var(--accent)] bg-[var(--accent-soft)]"
+                  ? "border-[color:var(--accent)] bg-[var(--accent-soft)] text-black"
                   : unlocked
-                    ? "border-[color:var(--border)] bg-[var(--surface-strong)]"
-                    : "border-[color:var(--border)] bg-[var(--surface)] opacity-80"
+                    ? "border-[color:var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)]"
+                    : "border-[color:var(--border)] bg-[var(--surface)] text-[var(--muted)]"
               }`}
             >
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                  Clue {clueNumber}
-                </span>
-                <span className="rounded-full border border-[color:var(--border)] px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
-                  {active ? "Active" : unlocked ? "Open" : "Locked"}
-                </span>
-              </div>
-              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                {active
-                  ? "This is the clue currently in play."
-                  : unlocked
-                    ? "Already revealed earlier in the round."
-                    : "Stays hidden until another miss or manual reveal."}
-              </p>
-            </div>
+              {`Clue ${clueNumber}`}
+            </span>
           );
         })}
       </div>

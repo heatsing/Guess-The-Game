@@ -164,27 +164,27 @@ export default function GameBoard({
         : "border-[color:var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)]";
 
   return (
-    <div className="space-y-6">
-      <section className="app-frame px-5 py-5 md:px-6">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+    <div className="space-y-4">
+      <section className="app-frame px-4 py-4 md:px-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <div className="section-eyebrow">Live board</div>
-            <h2 className="font-display mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)] md:text-3xl">
+            <h2 className="font-display mt-1 text-xl font-semibold tracking-tight text-[var(--foreground)] md:text-2xl">
               Today's {modeLabel} puzzle
             </h2>
-            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{helperText}</p>
+            <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{helperText}</p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="metric-card min-w-[11rem]">
+            <div className="metric-card min-w-[9rem] p-3">
               <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Guesses used</div>
-              <div className="font-display mt-2 text-2xl font-semibold text-[var(--foreground)]">
+              <div className="font-display mt-1 text-xl font-semibold text-[var(--foreground)]">
                 {guesses.length}/{maxGuesses}
               </div>
             </div>
-            <div className="metric-card min-w-[11rem]">
+            <div className="metric-card min-w-[9rem] p-3">
               <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clues unlocked</div>
-              <div className="font-display mt-2 text-2xl font-semibold text-[var(--foreground)]">
+              <div className="font-display mt-1 text-xl font-semibold text-[var(--foreground)]">
                 {unlockedCount}/{totalClues}
               </div>
             </div>
@@ -192,16 +192,16 @@ export default function GameBoard({
         </div>
 
         {message ? (
-          <div className={`mt-5 rounded-[22px] border px-4 py-3 text-sm ${statusTone}`}>{message}</div>
+          <div className={`mt-3 rounded-[18px] border px-3 py-2 text-sm ${statusTone}`}>{message}</div>
         ) : null}
 
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
+        <div className="mt-3 grid gap-3 md:grid-cols-2">
           <div>
             <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
               <span>Attempt pace</span>
               <span>{attemptsProgress}%</span>
             </div>
-            <div className="progress-rail mt-2">
+            <div className="progress-rail mt-1.5">
               <span className="progress-fill" style={{ width: `${attemptsProgress}%` }} />
             </div>
           </div>
@@ -210,7 +210,7 @@ export default function GameBoard({
               <span>Reveal depth</span>
               <span>{clueProgress}%</span>
             </div>
-            <div className="progress-rail mt-2">
+            <div className="progress-rail mt-1.5">
               <span className="progress-fill cool" style={{ width: `${clueProgress}%` }} />
             </div>
           </div>
@@ -227,11 +227,11 @@ export default function GameBoard({
         onSkip={cluesUsed < totalClues ? skipClue : undefined}
       />
 
-      <section className="app-frame px-5 py-5 md:px-6">
+      <section className="app-frame px-4 py-4 md:px-5">
         <div className="flex items-center justify-between gap-3">
           <div>
             <div className="section-eyebrow">Guess history</div>
-            <div className="mt-2 text-sm leading-7 text-[var(--muted)]">
+            <div className="mt-1 text-sm leading-6 text-[var(--muted)]">
               Every submitted answer stays visible until the round ends.
             </div>
           </div>
@@ -241,13 +241,13 @@ export default function GameBoard({
         </div>
 
         {guesses.length ? (
-          <div className="mt-5 flex flex-wrap gap-2.5">
+          <div className="mt-3 flex flex-wrap gap-2">
             {guesses.map((guess, index) => {
               const correct = isCorrectGuess(game, guess);
               return (
                 <span
                   key={`${index}-${guess}`}
-                  className={`rounded-full border px-4 py-2 text-sm font-medium ${
+                  className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
                     correct
                       ? "border-green-500/30 bg-green-500/10 text-green-800 dark:text-green-200"
                       : "border-[color:var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)]"
@@ -259,14 +259,14 @@ export default function GameBoard({
             })}
           </div>
         ) : (
-          <div className="mt-5 rounded-[22px] border border-dashed border-[color:var(--border)] px-4 py-5 text-sm text-[var(--muted)]">
+          <div className="mt-3 rounded-[18px] border border-dashed border-[color:var(--border)] px-4 py-4 text-sm text-[var(--muted)]">
             No guesses yet. Start with the clue above and lock in your first answer.
           </div>
         )}
       </section>
 
       {finished && shareInfo ? (
-        <section className="app-frame px-5 py-5 md:px-6">
+        <section className="app-frame px-4 py-4 md:px-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-2xl">
               <div className="section-eyebrow">Share result</div>

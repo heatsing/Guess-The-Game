@@ -28,11 +28,7 @@ export const metadata: Metadata = {
   description: "Daily visual puzzle challenges across games, movies, logos, books, and more.",
 };
 
-const FEATURED_MODE_KEYS = ["game", "price", "movie", "book"];
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const featuredModes = MODES.filter((mode) => FEATURED_MODE_KEYS.includes(mode.key));
-
   return (
     <html lang="en" suppressHydrationWarning className={siteFont.variable}>
       <head>
@@ -44,24 +40,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-dvh antialiased">
         <div className="mx-auto max-w-6xl px-4 pb-12 pt-4 sm:px-6 lg:px-8">
-          <div className="app-frame mb-5 px-4 py-4 md:px-6">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <div className="section-eyebrow">More daily puzzle modes</div>
-                <div className="mt-2 text-lg font-extrabold text-[var(--foreground)] md:text-xl">
-                  Jump between visual guessing games without leaving the same flow.
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {featuredModes.map((mode) => (
-                  <Link key={mode.key} href={mode.href} className="secondary-button px-4 py-2.5">
-                    {mode.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-
           <header className="mb-8">
             <div className="text-center">
               <Link href="/" className="inline-flex flex-col items-center gap-4">

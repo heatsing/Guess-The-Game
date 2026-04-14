@@ -1,41 +1,44 @@
 [
   {
-    "id": "demo-1",
+    "id": "demo-hollow-knight",
+    "slug": "hollow-knight",
     "title": "Hollow Knight",
     "acceptableAnswers": ["hollowknight", "空洞骑士"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rze.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rze.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rze.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rze.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rze.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rze.jpg"
     ]
   },
   {
-    "id": "demo-2",
+    "id": "demo-celeste",
+    "slug": "celeste",
     "title": "Celeste",
     "acceptableAnswers": ["celeste", "蔚蓝"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rxf.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rxf.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rxf.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rxf.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rxf.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/co1rxf.jpg"
     ]
   },
   {
-    "id": "demo-3",
+    "id": "demo-portal-2",
+    "slug": "portal-2",
     "title": "Portal 2",
     "acceptableAnswers": ["portal2", "portal 2", "传送门2", "传送门 2"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://images.igdb.com/igdb/image/upload/t_720p/xli7a4dtzx0skqnlvxwu.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/xli7a4dtzx0skqnlvxwu.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/xli7a4dtzx0skqnlvxwu.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/xli7a4dtzx0skqnlvxwu.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/xli7a4dtzx0skqnlvxwu.jpg",
+      "https://images.igdb.com/igdb/image/upload/t_720p/xli7a4dtzx0skqnlvxwu.jpg"
     ]
   }
 ]
