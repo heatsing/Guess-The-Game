@@ -1,15 +1,16 @@
 [
   {
     "id": "angle-demo-1",
-    "title": "Demo Angle",
-    "acceptableAnswers": ["demo angle"],
+    "slug": "eiffel-angle",
+    "title": "Eiffel Tower",
+    "acceptableAnswers": ["eiffel tower", "eiffel", "tour eiffel"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/1280px-Tour_Eiffel_Wikimedia_Commons.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/1280px-Tour_Eiffel_Wikimedia_Commons.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/1280px-Tour_Eiffel_Wikimedia_Commons.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/1280px-Tour_Eiffel_Wikimedia_Commons.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/1280px-Tour_Eiffel_Wikimedia_Commons.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/1280px-Tour_Eiffel_Wikimedia_Commons.jpg"
     ]
   }
 ]

@@ -1,15 +1,16 @@
 [
   {
     "id": "price-demo-1",
-    "title": "199",
-    "acceptableAnswers": ["199", "$199", "199usd", "199 dollars", "199$"],
+    "slug": "camera-price-999",
+    "title": "999",
+    "acceptableAnswers": ["999", "$999", "999usd", "999 dollars", "999$"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1400&q=80"
     ]
   }
 ]

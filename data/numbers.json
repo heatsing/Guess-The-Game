@@ -1,15 +1,15 @@
 [
   {
-    "id": "number-demo-1",
-    "title": "Demo Number",
+    "id": "number-demo-42",
+    "title": "42",
     "acceptableAnswers": ["42", "forty two", "forty-two"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/42.svg/1024px-42.svg.png",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/42.svg/1024px-42.svg.png",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/42.svg/1024px-42.svg.png",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/42.svg/1024px-42.svg.png",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/42.svg/1024px-42.svg.png",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/42.svg/1024px-42.svg.png"
     ]
   }
 ]

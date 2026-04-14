@@ -1,15 +1,16 @@
 [
   {
-    "id": "phrase-demo-1",
-    "title": "Demo Phrase",
-    "acceptableAnswers": ["demo phrase"],
+    "id": "phrase-demo-rainbow",
+    "slug": "chase-rainbows",
+    "title": "Chase Rainbows",
+    "acceptableAnswers": ["chase rainbows", "rainbow"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Rainbow_after_an_early_summer_shower.jpg/1280px-Rainbow_after_an_early_summer_shower.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Rainbow_after_an_early_summer_shower.jpg/1280px-Rainbow_after_an_early_summer_shower.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Rainbow_after_an_early_summer_shower.jpg/1280px-Rainbow_after_an_early_summer_shower.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Rainbow_after_an_early_summer_shower.jpg/1280px-Rainbow_after_an_early_summer_shower.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Rainbow_after_an_early_summer_shower.jpg/1280px-Rainbow_after_an_early_summer_shower.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Rainbow_after_an_early_summer_shower.jpg/1280px-Rainbow_after_an_early_summer_shower.jpg"
     ]
   }
 ]

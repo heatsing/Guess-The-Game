@@ -1,15 +1,16 @@
 [
   {
-    "id": "plant-demo-1",
-    "title": "Demo Plant",
-    "acceptableAnswers": ["demo plant"],
+    "id": "plant-demo-sunflower",
+    "slug": "sunflower",
+    "title": "Sunflower",
+    "acceptableAnswers": ["sunflower", "向日葵"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sunflower_sky_backdrop.jpg/1280px-Sunflower_sky_backdrop.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sunflower_sky_backdrop.jpg/1280px-Sunflower_sky_backdrop.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sunflower_sky_backdrop.jpg/1280px-Sunflower_sky_backdrop.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sunflower_sky_backdrop.jpg/1280px-Sunflower_sky_backdrop.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sunflower_sky_backdrop.jpg/1280px-Sunflower_sky_backdrop.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sunflower_sky_backdrop.jpg/1280px-Sunflower_sky_backdrop.jpg"
     ]
   }
 ]

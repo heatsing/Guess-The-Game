@@ -1,15 +1,16 @@
 [
   {
-    "id": "animal-demo-1",
-    "title": "Demo Animal",
-    "acceptableAnswers": ["demo animal"],
+    "id": "animal-demo-tiger",
+    "slug": "bengal-tiger",
+    "title": "Bengal Tiger",
+    "acceptableAnswers": ["tiger", "bengal tiger", "孟加拉虎"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Tiger_in_Ranthambore.jpg/1280px-Tiger_in_Ranthambore.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Tiger_in_Ranthambore.jpg/1280px-Tiger_in_Ranthambore.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Tiger_in_Ranthambore.jpg/1280px-Tiger_in_Ranthambore.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Tiger_in_Ranthambore.jpg/1280px-Tiger_in_Ranthambore.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Tiger_in_Ranthambore.jpg/1280px-Tiger_in_Ranthambore.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Tiger_in_Ranthambore.jpg/1280px-Tiger_in_Ranthambore.jpg"
     ]
   }
 ]

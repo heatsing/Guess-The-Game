@@ -1,15 +1,16 @@
 [
   {
-    "id": "logo-demo-1",
-    "title": "Demo Logo",
-    "acceptableAnswers": ["demo logo"],
+    "id": "logo-demo-apple",
+    "slug": "apple-logo",
+    "title": "Apple",
+    "acceptableAnswers": ["apple", "apple logo", "苹果"],
     "images": [
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg",
-      "/images/placeholder.svg"
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
     ]
   }
 ]
