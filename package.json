@@ -11,6 +11,8 @@
     "check": "npm run lint && npm run build",
     "validate": "tsx scripts/validate-data.ts",
     "fetch": "tsx scripts/fetch-all.ts",
+    "import:book": "tsx scripts/import-openlibrary-book.ts",
+    "refresh:books": "tsx scripts/refresh-daily-books.ts",
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui"
