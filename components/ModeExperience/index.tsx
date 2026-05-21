@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { DailyGame } from "@/lib/gameTypes";
 import type { Mode } from "@/lib/modes";
@@ -12,6 +12,7 @@ type Props = {
   mode: Mode;
   daily: DailyGame;
   titles?: string[];
+  challengeGames?: DailyGame[];
 };
 
 const SAMPLE_GUESSES = ["tower", "skyscraper", "eiffel tower", "starlight"];
@@ -48,16 +49,22 @@ function getHintLabels(modeKey: string) {
   return labels[modeKey] ?? ["Release year", "Category", "Origin", "Fun fact"];
 }
 
-export default function ModeExperience({ mode, daily, titles = [] }: Props) {
+export default function ModeExperience({ mode, daily, titles = [], challengeGames = [] }: Props) {
   const [input, setInput] = useState("");
   const [guesses, setGuesses] = useState<string[]>([]);
   const [status, setStatus] = useState<"playing" | "won" | "lost">("playing");
   const [cluesUsed, setCluesUsed] = useState(1);
   const [message, setMessage] = useState("");
+  const timedMode = mode.key === "country" || mode.key === "flag";
+  const [secondsLeft, setSecondsLeft] = useState(60);
+  const [score, setScore] = useState(0);
+  const [challengeIndex, setChallengeIndex] = useState(0);
+  const [timedActive, setTimedActive] = useState(timedMode);
+  const activeGame = timedMode && challengeGames.length ? challengeGames[challengeIndex % challengeGames.length]! : daily;
 
-  const maxGuesses = daily.maxGuesses ?? 6;
+  const maxGuesses = activeGame.maxGuesses ?? 6;
   const remaining = Math.max(0, maxGuesses - guesses.length);
-  const puzzleNumber = prettyPuzzleNumber(daily.puzzleKey);
+  const puzzleNumber = prettyPuzzleNumber(activeGame.puzzleKey);
   const hints = getHintLabels(mode.key);
   const otherModes = MODES.filter((item) => item.key !== mode.key).slice(0, 5);
   const suggestions = useMemo(() => {
@@ -66,9 +73,41 @@ export default function ModeExperience({ mode, daily, titles = [] }: Props) {
     return titles.filter((title) => title.toLowerCase().includes(query)).slice(0, 5);
   }, [input, titles]);
 
+  useEffect(() => {
+    if (!timedMode || !timedActive || secondsLeft <= 0) return;
+    const timer = window.setInterval(() => {
+      setSecondsLeft((current) => Math.max(0, current - 1));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [secondsLeft, timedActive, timedMode]);
+
+  useEffect(() => {
+    if (timedMode && secondsLeft === 0) {
+      setTimedActive(false);
+      setMessage(`Time is up. You scored ${score}.`);
+    }
+  }, [score, secondsLeft, timedMode]);
+
+  function nextTimedRound() {
+    setChallengeIndex((current) => current + 1);
+    setGuesses([]);
+    setCluesUsed(1);
+  }
+
+  function restartTimedChallenge() {
+    setScore(0);
+    setChallengeIndex(0);
+    setGuesses([]);
+    setInput("");
+    setMessage("");
+    setSecondsLeft(60);
+    setTimedActive(true);
+    setStatus("playing");
+  }
+
   function submitGuess(event: FormEvent) {
     event.preventDefault();
-    if (status !== "playing") return;
+    if (status !== "playing" || (timedMode && !timedActive)) return;
     const cleaned = input.trim();
     if (!cleaned) return;
 
@@ -76,12 +115,18 @@ export default function ModeExperience({ mode, daily, titles = [] }: Props) {
     setGuesses(nextGuesses);
     setInput("");
 
-    if (isCorrectGuess(daily, cleaned)) {
+    if (isCorrectGuess(activeGame, cleaned)) {
+      if (timedMode) {
+        setScore((current) => current + 1);
+        setMessage(`Correct. Next ${mode.shortLabel.toLowerCase()} loaded.`);
+        nextTimedRound();
+        return;
+      }
       setStatus("won");
       setMessage(`Correct. You solved ${mode.label} in ${nextGuesses.length} guesses.`);
       dispatchStatsUpdate(mode.key);
       try {
-        localStorage.setItem(storageKey(mode.key, daily.puzzleKey), JSON.stringify({ guesses: nextGuesses, status: "won" }));
+        localStorage.setItem(storageKey(mode.key, activeGame.puzzleKey), JSON.stringify({ guesses: nextGuesses, status: "won" }));
       } catch {
         // local progress is optional
       }
@@ -93,7 +138,7 @@ export default function ModeExperience({ mode, daily, titles = [] }: Props) {
 
     if (nextGuesses.length >= maxGuesses) {
       setStatus("lost");
-      setMessage(`Round over. The answer was ${daily.title}.`);
+      setMessage(`Round over. The answer was ${activeGame.title}.`);
       dispatchStatsUpdate(mode.key);
       return;
     }
@@ -102,7 +147,7 @@ export default function ModeExperience({ mode, daily, titles = [] }: Props) {
   }
 
   async function shareResult() {
-    const text = buildShareText({ game: daily, guesses, status, url: window.location.href });
+    const text = buildShareText({ game: activeGame, guesses, status, url: window.location.href });
     if (navigator.share) {
       await navigator.share({ title: mode.label, text, url: window.location.href });
       return;
@@ -127,23 +172,32 @@ export default function ModeExperience({ mode, daily, titles = [] }: Props) {
           <h1>{mode.label}</h1>
           <p>{mode.description}</p>
           <div className="mode-meta">
-            <span>Daily puzzle</span>
-            <span>{puzzleNumber}</span>
-            <span>{daily.puzzleKey}</span>
+            <span>{timedMode ? "60 second challenge" : "Daily puzzle"}</span>
+            <span>{timedMode ? `${score} correct` : puzzleNumber}</span>
+            <span>{timedMode ? `${secondsLeft}s left` : activeGame.puzzleKey}</span>
           </div>
         </div>
       </section>
 
       <section className="mode-layout">
         <div className="mode-primary">
-          <PuzzleSurface mode={mode} daily={daily} guesses={guesses} cluesUsed={cluesUsed} />
+          {timedMode ? (
+            <TimedChallengeBar
+              score={score}
+              secondsLeft={secondsLeft}
+              total={challengeGames.length}
+              active={timedActive}
+              onRestart={restartTimedChallenge}
+            />
+          ) : null}
+          <PuzzleSurface mode={mode} daily={activeGame} guesses={guesses} cluesUsed={cluesUsed} />
           <form onSubmit={submitGuess} className="guess-strip">
             <div className="guess-field-wrap">
               <input
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
-                placeholder={mode.template === "logic" ? "Enter your number or estimate..." : "Type your guess here..."}
-                disabled={status !== "playing"}
+                placeholder={timedMode ? `Guess this ${mode.key === "flag" ? "flag" : "country"}...` : mode.template === "logic" ? "Enter your number or estimate..." : "Type your guess here..."}
+                disabled={status !== "playing" || (timedMode && !timedActive)}
                 className="guess-field"
               />
               {suggestions.length ? (
@@ -156,13 +210,13 @@ export default function ModeExperience({ mode, daily, titles = [] }: Props) {
                 </div>
               ) : null}
             </div>
-            <button type="submit" disabled={!input.trim() || status !== "playing"} className="submit-button">
+            <button type="submit" disabled={!input.trim() || status !== "playing" || (timedMode && !timedActive)} className="submit-button">
               Submit Guess
             </button>
           </form>
 
           <div className="attempt-note">
-            <span>{remaining} attempts remaining</span>
+            <span>{timedMode ? `${challengeGames.length} global entries loaded` : `${remaining} attempts remaining`}</span>
             <button type="button" onClick={() => setCluesUsed((value) => Math.min(hints.length, value + 1))}>
               Reveal hint
             </button>
@@ -170,7 +224,7 @@ export default function ModeExperience({ mode, daily, titles = [] }: Props) {
 
           {message ? <div className={`result-banner ${status}`}>{message}</div> : null}
 
-          <GuessHistory mode={mode} daily={daily} guesses={guesses} />
+          <GuessHistory mode={mode} daily={activeGame} guesses={guesses} />
         </div>
 
         <aside className="mode-sidebar">
@@ -208,29 +262,61 @@ function PuzzleSurface({
   return <ImagePuzzle mode={mode} daily={daily} cluesUsed={cluesUsed} />;
 }
 
+function TimedChallengeBar({
+  score,
+  secondsLeft,
+  total,
+  active,
+  onRestart,
+}: {
+  score: number;
+  secondsLeft: number;
+  total: number;
+  active: boolean;
+  onRestart: () => void;
+}) {
+  const progress = Math.max(0, Math.min(100, (secondsLeft / 60) * 100));
+
+  return (
+    <section className="timed-card">
+      <div>
+        <span>Timed global challenge</span>
+        <strong>{secondsLeft}s</strong>
+      </div>
+      <div className="timed-progress"><i style={{ width: `${progress}%` }} /></div>
+      <div>
+        <span>{score} correct</span>
+        <span>{total} countries loaded</span>
+        {!active ? <button type="button" onClick={onRestart}>Play again</button> : null}
+      </div>
+    </section>
+  );
+}
+
 function ImagePuzzle({ mode, daily, cluesUsed }: { mode: Mode; daily: DailyGame; cluesUsed: number }) {
   const image = daily.images[Math.min(daily.images.length - 1, Math.max(0, cluesUsed - 1))] ?? "/images/placeholder.svg";
   const isDrawing = mode.key === "drawing";
   const isFlag = mode.key === "flag";
+  const isCountry = mode.key === "country";
 
   return (
     <section className="puzzle-card">
       <div className="puzzle-card-top">
-        <span>{isFlag ? "Which country's flag is this?" : isDrawing ? "Drawing clarity" : "Clue image"}</span>
+        <span>{isFlag ? "Which country's flag is this?" : isCountry ? "Which country is this map?" : isDrawing ? "Drawing clarity" : "Clue image"}</span>
         <strong>{cluesUsed}/6</strong>
       </div>
       {isFlag ? (
-        <div className="flag-stage" aria-label="Italy flag clue">
-          <span className="flag-green" />
-          <span className="flag-white" />
-          <span className="flag-red" />
+        <div className="image-stage flag-image-stage">
+          <img src={image} alt={`${daily.title} flag`} />
         </div>
       ) : isDrawing ? (
         <div className="drawing-stage" aria-label="Blurred bicycle drawing">
           <div className="bike-shape" />
         </div>
-      ) : mode.key === "country" ? (
-        <div className="country-stage" aria-label="Blurred country outline" />
+      ) : isCountry ? (
+        <div className="image-stage country-map-stage">
+          <img src={image} alt={`${daily.title} map silhouette`} />
+        </div>
       ) : (
         <div className="image-stage">
           <img src={image} alt={`${mode.label} clue`} />

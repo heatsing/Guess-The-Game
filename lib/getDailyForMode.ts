@@ -64,6 +64,10 @@ export function getTitlesForMode(modeKey: string): string[] {
   return list.map((g) => g.title);
 }
 
+export function getGamesForMode(modeKey: string): Game[] {
+  return DATA[modeKey] ?? [];
+}
+
 export async function getDailyForModeSmart(modeKey: string, date = new Date()): Promise<DailyGame> {
   const fromSanity = await getSanityDailyForMode(modeKey, date);
   if (fromSanity) return fromSanity;

@@ -13,6 +13,7 @@
     "fetch": "tsx scripts/fetch-all.ts",
     "import:book": "tsx scripts/import-openlibrary-book.ts",
     "refresh:books": "tsx scripts/refresh-daily-books.ts",
+    "refresh:countries": "tsx scripts/refresh-country-flag-data.ts",
     "test": "vitest",
     "test:run": "vitest run",
     "test:ui": "vitest --ui"

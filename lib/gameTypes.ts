@@ -6,6 +6,15 @@ export const GameSchema = z.object({
   title: z.string().min(1),
   acceptableAnswers: z.array(z.string()).optional(),
   images: z.array(z.string()).min(1),
+  hints: z.array(z.string()).optional(),
+  metadata: z.record(z.string(), z.union([z.string(), z.number(), z.array(z.string())])).optional(),
+  source: z
+    .object({
+      name: z.string(),
+      url: z.string().url(),
+      license: z.string().optional(),
+    })
+    .optional(),
 });
 
 export type Game = z.infer<typeof GameSchema>;
