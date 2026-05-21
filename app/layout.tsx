@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import ThemeToggle from "@/components/ThemeToggle";
 import FAQSection from "@/components/FAQSection";
 import AboutSection from "@/components/AboutSection";
-import { MODES } from "@/lib/modes";
+import SiteHeader from "@/components/SiteHeader";
 
 // App Router equivalent of project-wide getStaticProps/ISR.
 // If you want getServerSideProps-like behavior instead, switch this to:
@@ -40,53 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-dvh antialiased">
         <div className="mx-auto max-w-6xl px-4 pb-12 pt-4 sm:px-6 lg:px-8">
-          <header className="mb-8">
-            <div className="text-center">
-              <Link href="/" className="inline-flex flex-col items-center gap-4">
-                <div className="flex h-20 w-20 items-center justify-center rounded-[22px] border-2 border-black/80 bg-white p-3 shadow-[0_10px_24px_rgba(0,0,0,0.08)] dark:border-white/20 dark:bg-[var(--surface)]">
-                  <Image
-                    src="/logo.png"
-                    alt="Guess The Game logo"
-                    width={88}
-                    height={88}
-                    className="h-14 w-14 object-contain"
-                    priority
-                  />
-                </div>
-                <div>
-                  <div className="section-eyebrow">Daily image puzzle</div>
-                  <div className="font-display mt-2 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
-                    GuessTheGame
-                  </div>
-                  <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">
-                    Guess the answer from six image clues, save your streak locally, and come back
-                    tomorrow for a fresh round.
-                  </p>
-                </div>
-              </Link>
-
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-                <Link href="/game" className="primary-button">
-                  Play today's game
-                </Link>
-                <Link href="/faq" className="secondary-button">
-                  Read the rules
-                </Link>
-                <ThemeToggle />
-              </div>
-            </div>
-
-            <nav className="mt-6 flex gap-2 overflow-x-auto pb-1">
-              {MODES.map((mode) => (
-                <Link key={mode.key} href={mode.href} className="nav-chip">
-                  <span className="rounded-lg bg-[var(--accent-soft)] px-2 py-1 text-[0.65rem] text-[var(--foreground)]">
-                    {mode.badge}
-                  </span>
-                  <span>{mode.shortLabel}</span>
-                </Link>
-              ))}
-            </nav>
-          </header>
+          <SiteHeader />
 
           {children}
 

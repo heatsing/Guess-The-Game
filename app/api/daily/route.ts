@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDailyForModeSmart, isModeKey } from "@/lib/getDailyForMode";
 
-export const dynamic = "force-static";
-export const revalidate = 60;
+// This route depends on the `mode` search param, so it cannot be statically
+// collapsed into one payload for every request.
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   const mode = req.nextUrl.searchParams.get("mode") ?? "game";

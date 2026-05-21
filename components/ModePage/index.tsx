@@ -24,35 +24,30 @@ export default async function ModePage({ modeKey, modeLabel, description, daily 
   const rules = GAME_RULES[modeKey] ?? GAME_RULES.game;
 
   return (
-    <main className="space-y-5">
-      <section className="app-frame px-5 py-5 text-center md:px-6 md:py-6">
-        <div className="mx-auto max-w-4xl">
+    <main className="space-y-6">
+      <section className="mx-auto max-w-4xl text-center">
+        <div>
           <span className="inline-flex rounded-lg bg-[var(--accent-soft)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.22em] text-black">
             {mode?.badge ?? "GT"}
           </span>
-          <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
+          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
             {modeLabel}
           </h1>
-          <p className="mx-auto mt-2 max-w-3xl text-base font-semibold leading-7 text-[var(--muted)]">
+          <p className="mx-auto mt-3 max-w-3xl text-base font-semibold leading-7 text-[var(--muted)]">
             {description}
           </p>
         </div>
 
-        <div className="mx-auto mt-4 grid max-w-4xl gap-2 md:grid-cols-3">
-          <div className="metric-card p-3">
-            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Puzzle date</div>
-            <div className="mt-1 text-xl font-extrabold text-[var(--foreground)]">{daily.puzzleKey}</div>
-          </div>
-          <div className="metric-card p-3">
-            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Max guesses</div>
-            <div className="mt-1 text-xl font-extrabold text-[var(--foreground)]">{daily.maxGuesses}</div>
-          </div>
-          <div className="metric-card p-3">
-            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clues</div>
-            <div className="mt-1 text-xl font-extrabold text-[var(--foreground)]">
-              {Math.max(1, daily.images.length || 6)}
-            </div>
-          </div>
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+          <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
+            Puzzle date {daily.puzzleKey}
+          </span>
+          <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
+            {daily.maxGuesses} guesses max
+          </span>
+          <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
+            {Math.max(1, daily.images.length || 6)} clues
+          </span>
         </div>
       </section>
 
@@ -63,13 +58,13 @@ export default async function ModePage({ modeKey, modeLabel, description, daily 
         titles={titles}
       />
 
-      <section className="grid gap-4 xl:grid-cols-[1fr_1fr]">
+      <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
         <section className="panel-card px-6 py-7">
           <div className="section-eyebrow">How to play</div>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
             {howToPlay.title}
           </h2>
-          <div className="mt-6 space-y-4">
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
             {howToPlay.steps.map((step, index) => (
               <div key={index} className="metric-card">
                 <div className="flex items-start gap-4">
@@ -83,21 +78,23 @@ export default async function ModePage({ modeKey, modeLabel, description, daily 
           </div>
         </section>
 
-        <section className="panel-card px-6 py-7">
-          <div className="section-eyebrow">Rules and timing</div>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
-            Know the round before you start
-          </h2>
-          <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{rules}</p>
+        <section className="space-y-4">
+          <section className="panel-card px-6 py-7">
+            <div className="section-eyebrow">Rules and timing</div>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
+              Know the round before you start
+            </h2>
+            <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{rules}</p>
 
-          <div className="mt-6 grid gap-3">
-            <CalendarDateCard puzzleKey={daily.puzzleKey} />
-            <NextGameCountdown />
-          </div>
+            <div className="mt-6 grid gap-3">
+              <CalendarDateCard puzzleKey={daily.puzzleKey} />
+              <NextGameCountdown />
+            </div>
+          </section>
+
+          <PlayerStatistics namespace={modeKey} />
         </section>
       </section>
-
-      <PlayerStatistics namespace={modeKey} />
 
       <section className="app-frame px-6 py-6 md:px-8">
         <div className="text-center">

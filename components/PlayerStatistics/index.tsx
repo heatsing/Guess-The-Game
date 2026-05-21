@@ -154,14 +154,14 @@ export default function PlayerStatistics({ namespace }: { namespace: string }) {
   const lossShare = stats.played ? Math.round((stats.losses / stats.played) * 100) : 0;
 
   return (
-    <section className="app-frame px-5 py-6 md:px-6">
+    <section className="app-frame px-5 py-5 md:px-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <div className="section-eyebrow">Player statistics</div>
           <h2 className="font-display mt-2 text-2xl font-semibold tracking-tight text-[var(--foreground)]">
             Your device, your streaks
           </h2>
-          <p className="mt-2 text-sm leading-7 text-[var(--muted)]">
+          <p className="mt-2 max-w-2xl text-sm leading-7 text-[var(--muted)]">
             Saved locally per mode. Nothing here depends on an account.
           </p>
         </div>
@@ -170,7 +170,7 @@ export default function PlayerStatistics({ namespace }: { namespace: string }) {
         </span>
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-3">
         <div className="metric-card">
           <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Played</div>
           <div className="font-display mt-2 text-2xl font-semibold text-[var(--foreground)]">
@@ -209,7 +209,7 @@ export default function PlayerStatistics({ namespace }: { namespace: string }) {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
+      <div className="mt-5 grid gap-4">
         <div className="panel-card-strong p-5">
           <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Result split</div>
           <div className="mt-4 space-y-4">
@@ -235,10 +235,10 @@ export default function PlayerStatistics({ namespace }: { namespace: string }) {
         </div>
 
         <div className="panel-card-strong p-5">
-          <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Reading guide</div>
+          <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">How to read this</div>
           <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-            A higher win rate usually means you are solving earlier in the clue stack. The best
-            win metric shows your fewest guesses needed on a successful round.
+            A higher win rate usually means you are solving earlier in the clue stack. Best win is
+            your fewest guesses on a successful round, while streaks only count consecutive UTC days.
           </p>
         </div>
       </div>

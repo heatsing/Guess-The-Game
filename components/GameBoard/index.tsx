@@ -43,6 +43,22 @@ export default function GameBoard({
   const finished = status !== "playing";
   const attemptsProgress = Math.round((guesses.length / maxGuesses) * 100);
   const clueProgress = Math.round((unlockedCount / totalClues) * 100);
+  const stateLabel =
+    status === "won"
+      ? "Solved"
+      : status === "lost"
+        ? "Round over"
+        : guesses.length === 0
+          ? "Fresh board"
+          : `${remaining} left`;
+  const stateCopy =
+    status === "won"
+      ? "No spoiler share card is ready below."
+      : status === "lost"
+        ? "The answer is revealed. Come back for the next round."
+        : guesses.length === 0
+          ? "Start with the first clue and take your best shot."
+          : `Guess ${Math.min(guesses.length + 1, maxGuesses)} is up next.`;
 
   const helperText = useMemo(() => {
     if (status === "won") {
@@ -97,16 +113,17 @@ export default function GameBoard({
     if (!cleaned) return;
 
     const nextGuesses = [...guesses, cleaned].slice(0, maxGuesses);
-    const nextClue = Math.min(totalClues, Math.max(cluesUsed, nextGuesses.length + 1));
 
     setGuesses(nextGuesses);
-    setCluesUsed(nextClue);
 
     if (isCorrectGuess(game, cleaned)) {
       setStatus("won");
       setMessage("Correct. Puzzle solved.");
       return;
     }
+
+    const nextClue = Math.min(totalClues, Math.max(cluesUsed, nextGuesses.length + 1));
+    setCluesUsed(nextClue);
 
     if (nextGuesses.length >= maxGuesses) {
       setStatus("lost");
@@ -164,56 +181,139 @@ export default function GameBoard({
         : "border-[color:var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)]";
 
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-5xl space-y-4">
       <section className="app-frame px-4 py-4 md:px-5">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            <div className="section-eyebrow">Live board</div>
-            <h2 className="font-display mt-1 text-xl font-semibold tracking-tight text-[var(--foreground)] md:text-2xl">
-              Today's {modeLabel} puzzle
-            </h2>
-            <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{helperText}</p>
-          </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="section-eyebrow">Daily board</div>
+              <h2 className="font-display mt-1 text-xl font-semibold tracking-tight text-[var(--foreground)] md:text-2xl">
+                Today's {modeLabel} puzzle
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{helperText}</p>
+            </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="metric-card min-w-[9rem] p-3">
-              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Guesses used</div>
-              <div className="font-display mt-1 text-xl font-semibold text-[var(--foreground)]">
-                {guesses.length}/{maxGuesses}
+            <div className="panel-card min-w-[18rem] px-4 py-4">
+              <div className="flex items-center gap-4">
+                <div className="min-w-0">
+                  <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Board status</div>
+                  <div className="font-display mt-1 text-2xl font-semibold text-[var(--foreground)]">
+                    {stateLabel}
+                  </div>
+                  <div className="mt-1 text-sm text-[var(--muted)]">{stateCopy}</div>
+                </div>
+                <div className="ml-auto flex shrink-0 items-center gap-2">
+                  {Array.from({ length: maxGuesses }).map((_, index) => {
+                    const slotNumber = index + 1;
+                    const isPastGuess = slotNumber <= guesses.length;
+                    const isCurrentGuess = !finished && slotNumber === Math.min(guesses.length + 1, maxGuesses);
+                    return (
+                      <span
+                        key={slotNumber}
+                        className={`h-3 w-3 rounded-full border ${
+                          status === "won" && slotNumber === guesses.length
+                            ? "border-green-500 bg-green-500"
+                            : status === "lost" && slotNumber === maxGuesses
+                              ? "border-red-500 bg-red-500"
+                              : isPastGuess
+                                ? "border-[color:var(--accent)] bg-[var(--accent)]"
+                                : isCurrentGuess
+                                  ? "border-[color:var(--foreground)] bg-[var(--surface)]"
+                                  : "border-[color:var(--border)] bg-transparent"
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             </div>
-            <div className="metric-card min-w-[9rem] p-3">
-              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clues unlocked</div>
-              <div className="font-display mt-1 text-xl font-semibold text-[var(--foreground)]">
-                {unlockedCount}/{totalClues}
+          </div>
+
+          <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,20rem)]">
+            <div className="panel-card px-4 py-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Round progress</div>
+                <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                  {remaining} left
+                </span>
+              </div>
+              <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                <div>
+                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                    <span>Attempt pace</span>
+                    <span>{attemptsProgress}%</span>
+                  </div>
+                  <div className="progress-rail mt-1.5">
+                    <span className="progress-fill" style={{ width: `${attemptsProgress}%` }} />
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
+                    <span>Reveal depth</span>
+                    <span>{clueProgress}%</span>
+                  </div>
+                  <div className="progress-rail mt-1.5">
+                    <span className="progress-fill cool" style={{ width: `${clueProgress}%` }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="metric-card p-3">
+                <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Guesses</div>
+                <div className="font-display mt-1 text-xl font-semibold text-[var(--foreground)]">
+                  {guesses.length}/{maxGuesses}
+                </div>
+              </div>
+              <div className="metric-card p-3">
+                <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clues</div>
+                <div className="font-display mt-1 text-xl font-semibold text-[var(--foreground)]">
+                  {unlockedCount}/{totalClues}
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {message ? (
-          <div className={`mt-3 rounded-[18px] border px-3 py-2 text-sm ${statusTone}`}>{message}</div>
-        ) : null}
+          {message ? (
+            <div className={`rounded-[18px] border px-3 py-2 text-sm ${statusTone}`}>{message}</div>
+          ) : null}
 
-        <div className="mt-3 grid gap-3 md:grid-cols-2">
-          <div>
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-              <span>Attempt pace</span>
-              <span>{attemptsProgress}%</span>
-            </div>
-            <div className="progress-rail mt-1.5">
-              <span className="progress-fill" style={{ width: `${attemptsProgress}%` }} />
-            </div>
-          </div>
-          <div>
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--muted)]">
-              <span>Reveal depth</span>
-              <span>{clueProgress}%</span>
-            </div>
-            <div className="progress-rail mt-1.5">
-              <span className="progress-fill cool" style={{ width: `${clueProgress}%` }} />
-            </div>
-          </div>
+          <details className="group rounded-[20px] border border-[color:var(--border)] bg-[var(--surface-strong)] px-4 py-4">
+            <summary className="flex items-center justify-between gap-3">
+              <div>
+                <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Your guesses</div>
+                <div className="mt-1 text-sm text-[var(--foreground)]">
+                  {guesses.length
+                    ? `${guesses.length} submitted so far. Open to review the round history.`
+                    : "No guesses yet. This stays tucked away until you need it."}
+                </div>
+              </div>
+              <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">
+                {guesses.length} total
+              </span>
+            </summary>
+
+            {guesses.length ? (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {guesses.map((guess, index) => {
+                  const correct = isCorrectGuess(game, guess);
+                  return (
+                    <span
+                      key={`${index}-${guess}`}
+                      className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
+                        correct
+                          ? "border-green-500/30 bg-green-500/10 text-green-800 dark:text-green-200"
+                          : "border-[color:var(--border)] bg-[var(--surface)] text-[var(--foreground)]"
+                      }`}
+                    >
+                      {guess}
+                    </span>
+                  );
+                })}
+              </div>
+            ) : null}
+          </details>
         </div>
       </section>
 
@@ -226,44 +326,6 @@ export default function GameBoard({
         options={titles}
         onSkip={cluesUsed < totalClues ? skipClue : undefined}
       />
-
-      <section className="app-frame px-4 py-4 md:px-5">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <div className="section-eyebrow">Guess history</div>
-            <div className="mt-1 text-sm leading-6 text-[var(--muted)]">
-              Every submitted answer stays visible until the round ends.
-            </div>
-          </div>
-          <span className="rounded-full border border-[color:var(--border)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-            {guesses.length} entries
-          </span>
-        </div>
-
-        {guesses.length ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {guesses.map((guess, index) => {
-              const correct = isCorrectGuess(game, guess);
-              return (
-                <span
-                  key={`${index}-${guess}`}
-                  className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
-                    correct
-                      ? "border-green-500/30 bg-green-500/10 text-green-800 dark:text-green-200"
-                      : "border-[color:var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)]"
-                  }`}
-                >
-                  {guess}
-                </span>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="mt-3 rounded-[18px] border border-dashed border-[color:var(--border)] px-4 py-4 text-sm text-[var(--muted)]">
-            No guesses yet. Start with the clue above and lock in your first answer.
-          </div>
-        )}
-      </section>
 
       {finished && shareInfo ? (
         <section className="app-frame px-4 py-4 md:px-5">

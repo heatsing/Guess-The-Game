@@ -108,101 +108,103 @@ export default function GuessInput({
   const showSuggestions = open && suggestions.length > 0;
 
   return (
-    <section className="app-frame px-4 py-4 md:px-5">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div className="max-w-2xl">
-          <div className="section-eyebrow">Submit your guess</div>
+    <section className="app-frame px-4 py-5 md:px-5">
+      <div className="mx-auto max-w-4xl">
+        <div className="text-center">
+          <div className="section-eyebrow">Make your guess</div>
           <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-            Type an answer and press Enter. Arrow keys navigate suggestions.
+            Keep the rhythm simple: type a title, pick a match if needed, then submit.
           </p>
         </div>
 
-        {onSkip ? (
-          <button type="button" onClick={onSkip} className="secondary-button">
-            Reveal next clue
-          </button>
+        <form onSubmit={submitForm} className="mt-4">
+          <div className="relative">
+            <input
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+                setOpen(true);
+                setHighlightIndex(-1);
+              }}
+              onFocus={() => {
+                if (value.trim()) setOpen(true);
+              }}
+              onBlur={() => {
+                setTimeout(() => setOpen(false), 120);
+              }}
+              onKeyDown={handleKeyDown}
+              disabled={disabled}
+              placeholder={placeholder}
+              aria-autocomplete="list"
+              aria-expanded={showSuggestions}
+              className="w-full rounded-full border-2 border-[color:var(--border-strong)] bg-[var(--surface-strong)] px-5 py-4 text-center text-base text-[var(--foreground)] outline-none placeholder:text-slate-400 focus:border-[color:var(--accent)] disabled:cursor-not-allowed disabled:opacity-60 md:text-lg"
+            />
+
+            {showSuggestions ? (
+              <div
+                className="absolute z-20 mt-2 w-full overflow-hidden rounded-[22px] border border-[color:var(--border)] bg-[var(--surface)]"
+                style={{ boxShadow: "var(--shadow-soft)" }}
+              >
+                <div className="border-b border-[color:var(--border)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
+                  Top matches
+                </div>
+                <div className="max-h-72 overflow-auto py-2">
+                  {suggestions.map((item, index) => (
+                    <button
+                      key={item.title}
+                      type="button"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setValue(item.title);
+                        setOpen(false);
+                        setHighlightIndex(-1);
+                      }}
+                      className={`flex w-full items-center justify-between px-4 py-3 text-left ${
+                        index === highlightIndex ? "bg-[var(--accent-soft)]" : "hover:bg-[var(--surface-muted)]"
+                      }`}
+                    >
+                      <span className="truncate text-sm font-medium text-[var(--foreground)]">
+                        {item.title}
+                      </span>
+                      <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                        Fill
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+            {onSkip ? (
+              <button type="button" onClick={onSkip} className="secondary-button rounded-full px-5 py-3">
+                Reveal next clue
+              </button>
+            ) : null}
+
+            <button
+              type="submit"
+              disabled={!canSubmit}
+              className="primary-button min-w-[10rem] rounded-full px-6 py-3 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Enter guess
+            </button>
+          </div>
+        </form>
+
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--muted)]">
+          <span>Enter to submit</span>
+          <span>Arrow keys for matches</span>
+          {disabled ? <span>Round complete</span> : null}
+        </div>
+
+        {helperText ? (
+          <div className="mt-4 rounded-full border border-[color:var(--border)] bg-[var(--surface-strong)] px-4 py-2 text-center text-sm text-[var(--foreground)]">
+            {helperText}
+          </div>
         ) : null}
       </div>
-
-      <form onSubmit={submitForm} className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="relative">
-          <input
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              setOpen(true);
-              setHighlightIndex(-1);
-            }}
-            onFocus={() => {
-              if (value.trim()) setOpen(true);
-            }}
-            onBlur={() => {
-              setTimeout(() => setOpen(false), 120);
-            }}
-            onKeyDown={handleKeyDown}
-            disabled={disabled}
-            placeholder={placeholder}
-            aria-autocomplete="list"
-            aria-expanded={showSuggestions}
-            className="w-full rounded-[18px] border border-[color:var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-base text-[var(--foreground)] outline-none placeholder:text-slate-400 focus:border-[color:var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
-          />
-
-          {showSuggestions ? (
-            <div
-              className="absolute z-20 mt-2 w-full overflow-hidden rounded-[18px] border border-[color:var(--border)] bg-[var(--surface-strong)]"
-              style={{ boxShadow: "var(--shadow-soft)" }}
-            >
-              <div className="border-b border-[color:var(--border)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--muted)]">
-                Top matches
-              </div>
-              <div className="max-h-72 overflow-auto py-2">
-                {suggestions.map((item, index) => (
-                  <button
-                    key={item.title}
-                    type="button"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      setValue(item.title);
-                      setOpen(false);
-                      setHighlightIndex(-1);
-                    }}
-                    className={`flex w-full items-center justify-between px-4 py-2.5 text-left ${
-                      index === highlightIndex ? "bg-[var(--accent-soft)]" : "hover:bg-[var(--surface-muted)]"
-                    }`}
-                  >
-                    <span className="truncate text-sm font-medium text-[var(--foreground)]">
-                      {item.title}
-                    </span>
-                    <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
-                      Enter
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : null}
-        </div>
-
-        <button
-          type="submit"
-          disabled={!canSubmit}
-          className="primary-button rounded-[18px] px-6 py-3 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Submit guess
-        </button>
-      </form>
-
-      <div className="mt-2 flex flex-wrap gap-2 text-[10px] font-medium uppercase tracking-[0.16em] text-[var(--muted)]">
-        <span>Enter to submit</span>
-        <span>Arrow keys for suggestions</span>
-        {disabled ? <span>Round complete</span> : null}
-      </div>
-
-      {helperText ? (
-        <div className="mt-3 rounded-[18px] border border-[color:var(--border)] bg-[var(--surface-strong)] px-4 py-2 text-sm text-[var(--foreground)]">
-          {helperText}
-        </div>
-      ) : null}
     </section>
   );
 }
