@@ -181,7 +181,7 @@ export default function GameBoard({
         : "border-[color:var(--border)] bg-[var(--surface-strong)] text-[var(--foreground)]";
 
   return (
-    <div className="mx-auto max-w-5xl space-y-4">
+    <div id="board" className="mx-auto max-w-5xl space-y-4">
       <section className="app-frame px-4 py-4 md:px-5">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -276,7 +276,9 @@ export default function GameBoard({
           </div>
 
           {message ? (
-            <div className={`rounded-[18px] border px-3 py-2 text-sm ${statusTone}`}>{message}</div>
+            <div role="status" aria-live="polite" className={`rounded-[18px] border px-3 py-2 text-sm ${statusTone}`}>
+              {message}
+            </div>
           ) : null}
 
           <details className="group rounded-[20px] border border-[color:var(--border)] bg-[var(--surface-strong)] px-4 py-4">

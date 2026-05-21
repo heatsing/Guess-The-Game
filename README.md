@@ -1,6 +1,6 @@
 # GuessTheGame
 
-Daily image-guessing puzzle. Layout inspired by [SpellsBee](https://spellsbee.com), gameplay by [guessthe.game](https://guessthe.game).
+Daily image-guessing puzzle at [guessthegame.net](https://guessthegame.net/). The interface is tuned around a clear, comfortable daily puzzle UX with multiple image-based modes.
 
 ## Features
 

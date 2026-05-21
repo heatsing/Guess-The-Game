@@ -1,10 +1,19 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import FAQSection from "@/components/FAQSection";
 import AboutSection from "@/components/AboutSection";
 import SiteHeader from "@/components/SiteHeader";
+import {
+  SITE_DESCRIPTION,
+  SITE_HOST,
+  SITE_KEYWORDS,
+  SITE_NAME,
+  SITE_URL,
+  absoluteUrl,
+} from "@/lib/site";
+import { buildSiteJsonLd } from "@/lib/structuredData";
 
 // App Router equivalent of project-wide getStaticProps/ISR.
 // If you want getServerSideProps-like behavior instead, switch this to:
@@ -19,14 +28,67 @@ const siteFont = Nunito({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "GuessTheGame",
-    template: "%s | GuessTheGame",
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description: "Daily visual puzzle challenges across games, movies, logos, books, and more.",
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: SITE_KEYWORDS,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    type: "website",
+    images: [
+      {
+        url: absoluteUrl("/logo.png"),
+        width: 512,
+        height: 512,
+        alt: `${SITE_NAME} logo`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [absoluteUrl("/logo.png")],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+    shortcut: "/logo.png",
+  },
+  category: "games",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fff9e6" },
+    { media: "(prefers-color-scheme: dark)", color: "#12161d" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const siteJsonLd = buildSiteJsonLd();
+
   return (
     <html lang="en" suppressHydrationWarning className={siteFont.variable}>
       <head>
@@ -37,6 +99,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-dvh antialiased">
+        <a
+          href="#main-content"
+          className="sr-only absolute left-4 top-4 z-50 rounded-xl border-2 border-black bg-[var(--accent)] px-4 py-2 font-bold text-black focus:not-sr-only"
+        >
+          Skip to content
+        </a>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
+        />
         <div className="mx-auto max-w-6xl px-4 pb-12 pt-4 sm:px-6 lg:px-8">
           <SiteHeader />
 
@@ -54,7 +126,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <div>
                     <div className="section-eyebrow">Daily visual puzzle</div>
                     <div className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
-                      GuessTheGame
+                      {SITE_NAME}
                     </div>
                     <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">
                       A fast daily puzzle built around six image clues, simple rules, and a format
@@ -102,8 +174,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </nav>
 
                   <div className="text-sm leading-7 text-[var(--muted)] lg:text-right">
-                    <div>Copyright {new Date().getFullYear()} GuessTheGame</div>
-                    <div>GuessTheGame is not affiliated with guessthe.game in any way.</div>
+                    <div>Copyright {new Date().getFullYear()} {SITE_NAME}</div>
+                    <div>
+                      Official site:{" "}
+                      <a
+                        href={SITE_URL}
+                        className="font-bold text-[var(--foreground)] underline decoration-black/30 underline-offset-4"
+                      >
+                        {SITE_HOST}
+                      </a>
+                    </div>
+                    <div>{SITE_NAME} is an independent daily puzzle project.</div>
                   </div>
                 </div>
               </div>

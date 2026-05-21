@@ -1,69 +1,102 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { MODES } from "@/lib/modes";
+import { buildMetadata } from "@/lib/site";
+import { buildHomePageJsonLd } from "@/lib/structuredData";
 
-const HOW_TO_PLAY = [
+export const metadata: Metadata = buildMetadata({
+  title: "GuessTheGame: Daily image puzzle",
+  description:
+    "Play the daily GuessTheGame challenge and explore games, books, movies, logos, and more through six image clues and clear answer rules.",
+  path: "/",
+  keywords: ["daily game", "guessing game", "visual puzzle", "trivia game"],
+  siteNameInTitle: true,
+});
+
+const ROUND_STEPS = [
   {
     step: "1",
-    title: "Open the first clue",
-    text: "Start with the hardest image. If you already know it, submit early and protect your score.",
+    title: "Start with the toughest clue",
+    text: "Every round opens on the least revealing image so early recognition always matters.",
   },
   {
     step: "2",
-    title: "Guess the answer",
-    text: "Type the title and submit. Wrong guesses unlock the next, clearer clue in the stack.",
+    title: "Submit only when you want to",
+    text: "A wrong guess opens the next clue, so every attempt trades certainty for pressure.",
   },
   {
     step: "3",
-    title: "Come back tomorrow",
-    text: "Every mode refreshes daily at 00:00 UTC, so there is always another round waiting.",
+    title: "Return for the reset",
+    text: "Every mode refreshes daily at 00:00 UTC with local streaks saved on this device.",
   },
 ];
 
-const FEATURES = [
-  "One shared interface across all modes",
-  "Up to 6 clues and 6 guesses per round",
-  "Local streaks and results on this device",
+const HIGHLIGHTS = [
+  {
+    label: "12 daily modes",
+    value: "Games, books, movies, logos, and more",
+  },
+  {
+    label: "6 clues max",
+    value: "A short round with real pacing",
+  },
+  {
+    label: "00:00 UTC reset",
+    value: "One new puzzle every day",
+  },
 ];
 
 export default function HomePage() {
-  return (
-    <main className="space-y-8">
-      <section className="app-frame px-6 py-8 text-center md:px-10 md:py-10">
-        <h1 className="font-display text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-5xl">
-          Guess the game from image clues.
-        </h1>
-        <h2 className="mx-auto mt-4 max-w-4xl text-lg font-semibold leading-8 text-[var(--muted)] md:text-xl">
-          GuessTheGame is a free daily puzzle. Study the clue, submit your guess, and reveal the
-          next image only when you need it.
-        </h2>
+  const homeJsonLd = buildHomePageJsonLd(MODES);
 
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/game" className="primary-button">
-            Play Guess The Game
-          </Link>
-          <a href="#how-to-play" className="secondary-button">
-            How to play
-          </a>
+  return (
+    <main id="main-content" className="space-y-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+      />
+
+      <section className="app-frame overflow-hidden px-6 py-8 text-center md:px-10 md:py-12">
+        <div className="mx-auto max-w-4xl">
+          <div className="section-eyebrow">Daily visual puzzle</div>
+          <h1 className="font-display mt-3 text-4xl font-extrabold tracking-tight text-[var(--foreground)] md:text-6xl">
+            Guess the answer from six image clues.
+          </h1>
+          <p className="mx-auto mt-4 max-w-3xl text-base leading-8 text-[var(--muted)] md:text-lg">
+            GuessTheGame keeps the loop simple: open the clue, submit when you are ready, and only
+            reveal more when you need it. Each mode follows the same calm interface, daily reset,
+            and accepted-answer system.
+          </p>
+
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/game" className="primary-button">
+              Play Guess The Game
+            </Link>
+            <a href="#modes" className="secondary-button">
+              Browse all modes
+            </a>
+          </div>
         </div>
 
         <div className="mt-8 grid gap-3 md:grid-cols-3">
-          {FEATURES.map((feature) => (
-            <div key={feature} className="metric-card text-sm font-bold text-[var(--foreground)]">
-              {feature}
+          {HIGHLIGHTS.map((item) => (
+            <div key={item.label} className="metric-card text-left">
+              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">{item.label}</div>
+              <div className="mt-3 text-lg font-extrabold text-[var(--foreground)]">{item.value}</div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
         <div className="panel-card-strong px-6 py-7">
-          <div className="section-eyebrow">Today's featured mode</div>
+          <div className="section-eyebrow">Start here</div>
           <div className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
             Guess The Game
           </div>
           <p className="mt-3 text-base leading-8 text-[var(--muted)]">
-            Start with a blurred or cropped clue and see whether you can recognize the game before
-            the later reveals make it obvious.
+            The core mode is still the clearest entry point: a hidden video game, a stack of clues
+            that gets easier over time, and enough tension to make early guesses feel rewarding.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -77,51 +110,38 @@ export default function HomePage() {
         </div>
 
         <div className="panel-card px-6 py-7">
-          <div className="section-eyebrow">Quick facts</div>
-          <div className="mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-            <div className="metric-card">
-              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Modes</div>
-              <div className="mt-2 text-3xl font-extrabold text-[var(--foreground)]">{MODES.length}</div>
-            </div>
-            <div className="metric-card">
-              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Daily reset</div>
-              <div className="mt-2 text-3xl font-extrabold text-[var(--foreground)]">00:00 UTC</div>
-            </div>
-            <div className="metric-card">
-              <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clue stack</div>
-              <div className="mt-2 text-3xl font-extrabold text-[var(--foreground)]">Up to 6</div>
-            </div>
+          <div className="section-eyebrow">How a round works</div>
+          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
+            Quick to learn, easy to scan
+          </h2>
+          <div className="mt-6 space-y-3">
+            {ROUND_STEPS.map((item) => (
+              <article key={item.step} className="metric-card">
+                <div className="flex items-start gap-4">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black bg-[var(--accent-soft)] text-lg font-extrabold text-black">
+                    {item.step}
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-extrabold text-[var(--foreground)]">{item.title}</h3>
+                    <p className="mt-2 text-sm leading-7 text-[var(--muted)]">{item.text}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="how-to-play" className="app-frame px-6 py-8 md:px-8">
-        <div className="text-center">
-          <div className="section-eyebrow">How to play GuessTheGame</div>
+      <section id="modes" className="app-frame px-6 py-8 md:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="section-eyebrow">Choose a category</div>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
-            A simple loop with just enough tension
+            Same interface, different daily subjects
           </h2>
-        </div>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {HOW_TO_PLAY.map((item) => (
-            <article key={item.step} className="panel-card px-5 py-6 text-center">
-              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-black bg-[var(--accent-soft)] text-xl font-extrabold text-black">
-                {item.step}
-              </div>
-              <h3 className="mt-4 text-xl font-extrabold text-[var(--foreground)]">{item.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{item.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="app-frame px-6 py-8 md:px-8">
-        <div className="text-center">
-          <div className="section-eyebrow">Play other games</div>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
-            More daily categories, same clean rules
-          </h2>
+          <p className="mt-4 text-base leading-8 text-[var(--muted)]">
+            Move between games, books, movies, logos, prices, and more without relearning the
+            rules. The layout stays consistent so the clue itself remains the focus.
+          </p>
         </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">

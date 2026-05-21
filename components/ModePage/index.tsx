@@ -8,6 +8,7 @@ import { MODES } from "@/lib/modes";
 import { GAME_RULES } from "@/lib/gameRules";
 import { HOW_TO_PLAY } from "@/lib/howToPlay";
 import { getTitlesForModeSmart } from "@/lib/getDailyForMode";
+import { buildModePageJsonLd } from "@/lib/structuredData";
 
 type Props = {
   modeKey: string;
@@ -22,11 +23,19 @@ export default async function ModePage({ modeKey, modeLabel, description, daily 
   const otherModes = MODES.filter((item) => item.key !== modeKey);
   const howToPlay = HOW_TO_PLAY[modeKey] ?? HOW_TO_PLAY.game;
   const rules = GAME_RULES[modeKey] ?? GAME_RULES.game;
+  const modeJsonLd = mode ? buildModePageJsonLd(mode, description) : null;
 
   return (
-    <main className="space-y-6">
-      <section className="mx-auto max-w-4xl text-center">
-        <div>
+    <main id="main-content" className="space-y-6">
+      {modeJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(modeJsonLd) }}
+        />
+      ) : null}
+
+      <section className="app-frame px-6 py-7 md:px-8">
+        <div className="mx-auto max-w-4xl text-center">
           <span className="inline-flex rounded-lg bg-[var(--accent-soft)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.22em] text-black">
             {mode?.badge ?? "GT"}
           </span>
@@ -38,16 +47,23 @@ export default async function ModePage({ modeKey, modeLabel, description, daily 
           </p>
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
-            Puzzle date {daily.puzzleKey}
-          </span>
-          <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
-            {daily.maxGuesses} guesses max
-          </span>
-          <span className="rounded-full border border-[color:var(--border)] bg-[var(--surface)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
-            {Math.max(1, daily.images.length || 6)} clues
-          </span>
+        <div className="mt-7 grid gap-3 sm:grid-cols-3">
+          <article className="metric-card text-left">
+            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Puzzle date</div>
+            <div className="mt-2 text-lg font-extrabold text-[var(--foreground)]">{daily.puzzleKey}</div>
+          </article>
+          <article className="metric-card text-left">
+            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Guess budget</div>
+            <div className="mt-2 text-lg font-extrabold text-[var(--foreground)]">
+              {daily.maxGuesses} guesses max
+            </div>
+          </article>
+          <article className="metric-card text-left">
+            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clue stack</div>
+            <div className="mt-2 text-lg font-extrabold text-[var(--foreground)]">
+              {Math.max(1, daily.images.length || 6)} clues
+            </div>
+          </article>
         </div>
       </section>
 
@@ -58,7 +74,7 @@ export default async function ModePage({ modeKey, modeLabel, description, daily 
         titles={titles}
       />
 
-      <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+      <section className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
         <section className="panel-card px-6 py-7">
           <div className="section-eyebrow">How to play</div>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
