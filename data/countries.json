@@ -1,0 +1,9 @@
+[
+  {
+    "id": "demo-france",
+    "slug": "france",
+    "title": "France",
+    "acceptableAnswers": ["france", "french republic"],
+    "images": ["/images/placeholder.svg", "/images/placeholder.svg", "/images/placeholder.svg"]
+  }
+]

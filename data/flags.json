@@ -1,0 +1,9 @@
+[
+  {
+    "id": "demo-italy",
+    "slug": "italy",
+    "title": "Italy",
+    "acceptableAnswers": ["italy", "italian republic"],
+    "images": ["/images/placeholder.svg"]
+  }
+]

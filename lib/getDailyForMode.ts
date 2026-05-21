@@ -15,6 +15,12 @@ import animals from "@/data/animals.json";
 import plants from "@/data/plants.json";
 import numbers from "@/data/numbers.json";
 import prices from "@/data/prices.json";
+import colors from "@/data/colors.json";
+import countries from "@/data/countries.json";
+import drawings from "@/data/drawings.json";
+import emojis from "@/data/emojis.json";
+import flags from "@/data/flags.json";
+import words from "@/data/words.json";
 
 const DATA: Record<string, Game[]> = {
   game: games as Game[],
@@ -29,6 +35,12 @@ const DATA: Record<string, Game[]> = {
   plant: plants as Game[],
   number: numbers as Game[],
   price: prices as Game[],
+  colors: colors as Game[],
+  country: countries as Game[],
+  drawing: drawings as Game[],
+  emoji: emojis as Game[],
+  flag: flags as Game[],
+  word: words as Game[],
 };
 
 export function getDailyForMode(modeKey: string, date = new Date()): DailyGame {

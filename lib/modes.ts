@@ -5,6 +5,8 @@ export type Mode = {
   badge: string;
   href: string;
   description: string;
+  accent: string;
+  template: "image" | "quote" | "audio" | "logic" | "rebus" | "colors" | "word";
 };
 
 export const MODES: Mode[] = [
@@ -15,6 +17,8 @@ export const MODES: Mode[] = [
     badge: "VG",
     href: "/game",
     description: "Peel back six visual clues and name today's video game.",
+    accent: "violet",
+    template: "image",
   },
   {
     key: "book",
@@ -23,6 +27,8 @@ export const MODES: Mode[] = [
     badge: "BK",
     href: "/book",
     description: "Try to guess today's book in 6 guesses or less using covers, scenes, and story clues.",
+    accent: "emerald",
+    template: "quote",
   },
   {
     key: "movie",
@@ -31,6 +37,8 @@ export const MODES: Mode[] = [
     badge: "MV",
     href: "/movie",
     description: "Frames, props, and posters from today's hidden film.",
+    accent: "rose",
+    template: "image",
   },
   {
     key: "logo",
@@ -39,6 +47,8 @@ export const MODES: Mode[] = [
     badge: "LG",
     href: "/logo",
     description: "Brand marks revealed from tight crops to full clarity.",
+    accent: "amber",
+    template: "image",
   },
   {
     key: "house",
@@ -47,6 +57,8 @@ export const MODES: Mode[] = [
     badge: "HS",
     href: "/house",
     description: "Architecture and interiors from memorable homes and landmarks.",
+    accent: "indigo",
+    template: "image",
   },
   {
     key: "angle",
@@ -55,6 +67,8 @@ export const MODES: Mode[] = [
     badge: "AG",
     href: "/angle",
     description: "Extreme close-ups and strange perspectives that reward observation.",
+    accent: "teal",
+    template: "image",
   },
   {
     key: "phrase",
@@ -63,6 +77,8 @@ export const MODES: Mode[] = [
     badge: "PH",
     href: "/phrase",
     description: "Visual riddles and rebus puzzles turned into a daily challenge.",
+    accent: "pink",
+    template: "rebus",
   },
   {
     key: "song",
@@ -71,6 +87,8 @@ export const MODES: Mode[] = [
     badge: "SG",
     href: "/song",
     description: "Album art, lyric fragments, and music video clues for one track.",
+    accent: "purple",
+    template: "audio",
   },
   {
     key: "animal",
@@ -79,6 +97,8 @@ export const MODES: Mode[] = [
     badge: "AN",
     href: "/animal",
     description: "Silhouettes, textures, and habitats that point to one animal.",
+    accent: "orange",
+    template: "image",
   },
   {
     key: "plant",
@@ -87,6 +107,8 @@ export const MODES: Mode[] = [
     badge: "PL",
     href: "/plant",
     description: "Leaves, flowers, and stems that reveal a single plant.",
+    accent: "green",
+    template: "image",
   },
   {
     key: "number",
@@ -95,6 +117,8 @@ export const MODES: Mode[] = [
     badge: "NM",
     href: "/number",
     description: "Logic-driven rounds where each clue tightens the answer.",
+    accent: "blue",
+    template: "logic",
   },
   {
     key: "price",
@@ -103,6 +127,68 @@ export const MODES: Mode[] = [
     badge: "PR",
     href: "/price",
     description: "Estimate the mystery price using visuals and a limited reveal budget.",
+    accent: "yellow",
+    template: "logic",
+  },
+  {
+    key: "colors",
+    label: "Guess The Colors",
+    shortLabel: "Colors",
+    badge: "CL",
+    href: "/colors",
+    description: "Find the hidden color order using position feedback after each guess.",
+    accent: "rainbow",
+    template: "colors",
+  },
+  {
+    key: "country",
+    label: "Guess The Country",
+    shortLabel: "Country",
+    badge: "CY",
+    href: "/country",
+    description: "Identify a country from a blurred outline and geography clues.",
+    accent: "violet",
+    template: "image",
+  },
+  {
+    key: "drawing",
+    label: "Guess The Drawing",
+    shortLabel: "Drawing",
+    badge: "DR",
+    href: "/drawing",
+    description: "A sketch sharpens over time. Guess what is being drawn.",
+    accent: "indigo",
+    template: "image",
+  },
+  {
+    key: "emoji",
+    label: "Guess The Emoji",
+    shortLabel: "Emoji",
+    badge: "EJ",
+    href: "/emoji",
+    description: "Decode the emoji clue and submit the hidden phrase.",
+    accent: "pink",
+    template: "rebus",
+  },
+  {
+    key: "flag",
+    label: "Guess The Flag",
+    shortLabel: "Flag",
+    badge: "FL",
+    href: "/flag",
+    description: "Name the country from its flag and unlocked context clues.",
+    accent: "blue",
+    template: "image",
+  },
+  {
+    key: "word",
+    label: "Guess The Word",
+    shortLabel: "Word",
+    badge: "WD",
+    href: "/word",
+    description: "Solve the six-letter word from tile feedback and word hints.",
+    accent: "violet",
+    template: "word",
   },
 ];
 

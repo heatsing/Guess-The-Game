@@ -2,12 +2,9 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import FAQSection from "@/components/FAQSection";
-import AboutSection from "@/components/AboutSection";
 import SiteHeader from "@/components/SiteHeader";
 import {
   SITE_DESCRIPTION,
-  SITE_HOST,
   SITE_KEYWORDS,
   SITE_NAME,
   SITE_URL,
@@ -81,8 +78,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fff9e6" },
-    { media: "(prefers-color-scheme: dark)", color: "#12161d" },
+    { media: "(prefers-color-scheme: light)", color: "#070b14" },
+    { media: "(prefers-color-scheme: dark)", color: "#070b14" },
   ],
 };
 
@@ -109,89 +106,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
-        <div className="mx-auto max-w-6xl px-4 pb-12 pt-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1280px] px-4 pb-10 sm:px-6 lg:px-8">
           <SiteHeader />
 
           {children}
 
-          <div className="mt-14 flex flex-col gap-6">
-            <FAQSection />
-            <AboutSection />
-          </div>
-
-          <footer className="mt-12 pb-6">
-            <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen border-y-2 border-black/80 bg-[var(--accent-soft)] dark:border-[color:var(--border-strong)] dark:bg-[var(--background-strong)]">
-              <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-                <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
-                  <div>
-                    <div className="section-eyebrow">Daily visual puzzle</div>
-                    <div className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
-                      {SITE_NAME}
-                    </div>
-                    <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] md:text-base">
-                      A fast daily puzzle built around six image clues, simple rules, and a format
-                      that works across games, books, movies, logos, and more.
-                    </p>
-
-                    <div className="mt-5 flex flex-wrap gap-3">
-                      <Link href="/game" className="primary-button">
-                        Play today's challenge
-                      </Link>
-                      <Link href="/faq" className="secondary-button">
-                        Read the FAQ
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="metric-card">
-                      <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Daily reset</div>
-                      <div className="mt-2 text-2xl font-extrabold text-[var(--foreground)]">00:00 UTC</div>
-                      <div className="mt-2 text-sm leading-7 text-[var(--muted)]">A fresh puzzle arrives every day.</div>
-                    </div>
-                    <div className="metric-card">
-                      <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Progress</div>
-                      <div className="mt-2 text-2xl font-extrabold text-[var(--foreground)]">Local</div>
-                      <div className="mt-2 text-sm leading-7 text-[var(--muted)]">Streaks and results stay on this device.</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8 flex flex-col gap-4 border-t border-black/15 pt-5 dark:border-[color:var(--border)] lg:flex-row lg:items-center lg:justify-between">
-                  <nav className="flex flex-wrap items-center gap-2 text-sm font-bold text-[var(--foreground)]">
-                    <Link href="/" className="secondary-button px-4 py-2.5">
-                      Home
-                    </Link>
-                    <Link href="/game" className="secondary-button px-4 py-2.5">
-                      Daily challenge
-                    </Link>
-                    <Link href="/faq" className="secondary-button px-4 py-2.5">
-                      FAQ
-                    </Link>
-                    <Link href="/price" className="secondary-button px-4 py-2.5">
-                      Guess The Price
-                    </Link>
-                  </nav>
-
-                  <div className="text-sm leading-7 text-[var(--muted)] lg:text-right">
-                    <div>Copyright {new Date().getFullYear()} {SITE_NAME}</div>
-                    <div>
-                      Official site:{" "}
-                      <a
-                        href={SITE_URL}
-                        className="font-bold text-[var(--foreground)] underline decoration-black/30 underline-offset-4"
-                      >
-                        {SITE_HOST}
-                      </a>
-                    </div>
-                    <div>{SITE_NAME} is an independent daily puzzle project.</div>
-                  </div>
-                </div>
-              </div>
+          <footer className="site-footer">
+            <div>
+              <Link href="/" className="site-brand">
+                <ImagePlaceholder />
+                <span>Guess <strong>Universe</strong></span>
+              </Link>
+              <p>One universe. Daily guessing games across every category.</p>
             </div>
+            <nav>
+              <Link href="/">Daily Games</Link>
+              <Link href="/#all-games">All Games</Link>
+              <Link href="/faq">How to Play</Link>
+              <Link href="/game">Start Playing</Link>
+            </nav>
+            <form>
+              <label htmlFor="footer-email">Stay updated</label>
+              <div>
+                <input id="footer-email" placeholder="Enter your email" />
+                <button type="button" className="primary-button">Subscribe</button>
+              </div>
+            </form>
           </footer>
         </div>
       </body>
     </html>
   );
+}
+
+function ImagePlaceholder() {
+  return <span className="footer-logo-mark">?</span>;
 }

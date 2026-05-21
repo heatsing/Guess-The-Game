@@ -1,14 +1,8 @@
-import Link from "next/link";
 import type { DailyGame } from "@/lib/gameTypes";
-import GameBoard from "@/components/GameBoard";
-import PlayerStatistics from "@/components/PlayerStatistics";
-import CalendarDateCard from "@/components/CalendarDateCard";
-import NextGameCountdown from "@/components/NextGameCountdown";
 import { MODES } from "@/lib/modes";
-import { GAME_RULES } from "@/lib/gameRules";
-import { HOW_TO_PLAY } from "@/lib/howToPlay";
 import { getTitlesForModeSmart } from "@/lib/getDailyForMode";
 import { buildModePageJsonLd } from "@/lib/structuredData";
+import ModeExperience from "@/components/ModeExperience";
 
 type Props = {
   modeKey: string;
@@ -20,13 +14,11 @@ type Props = {
 export default async function ModePage({ modeKey, modeLabel, description, daily }: Props) {
   const titles = await getTitlesForModeSmart(modeKey);
   const mode = MODES.find((item) => item.key === modeKey);
-  const otherModes = MODES.filter((item) => item.key !== modeKey);
-  const howToPlay = HOW_TO_PLAY[modeKey] ?? HOW_TO_PLAY.game;
-  const rules = GAME_RULES[modeKey] ?? GAME_RULES.game;
   const modeJsonLd = mode ? buildModePageJsonLd(mode, description) : null;
+  if (!mode) return null;
 
   return (
-    <main id="main-content" className="space-y-6">
+    <>
       {modeJsonLd ? (
         <script
           type="application/ld+json"
@@ -34,111 +26,7 @@ export default async function ModePage({ modeKey, modeLabel, description, daily 
         />
       ) : null}
 
-      <section className="app-frame px-6 py-7 md:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <span className="inline-flex rounded-lg bg-[var(--accent-soft)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.22em] text-black">
-            {mode?.badge ?? "GT"}
-          </span>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)] md:text-4xl">
-            {modeLabel}
-          </h1>
-          <p className="mx-auto mt-3 max-w-3xl text-base font-semibold leading-7 text-[var(--muted)]">
-            {description}
-          </p>
-        </div>
-
-        <div className="mt-7 grid gap-3 sm:grid-cols-3">
-          <article className="metric-card text-left">
-            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Puzzle date</div>
-            <div className="mt-2 text-lg font-extrabold text-[var(--foreground)]">{daily.puzzleKey}</div>
-          </article>
-          <article className="metric-card text-left">
-            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Guess budget</div>
-            <div className="mt-2 text-lg font-extrabold text-[var(--foreground)]">
-              {daily.maxGuesses} guesses max
-            </div>
-          </article>
-          <article className="metric-card text-left">
-            <div className="text-xs uppercase tracking-[0.2em] text-[var(--muted)]">Clue stack</div>
-            <div className="mt-2 text-lg font-extrabold text-[var(--foreground)]">
-              {Math.max(1, daily.images.length || 6)} clues
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <GameBoard
-        game={daily}
-        modeLabel={modeLabel}
-        storageNamespace={modeKey}
-        titles={titles}
-      />
-
-      <section className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
-        <section className="panel-card px-6 py-7">
-          <div className="section-eyebrow">How to play</div>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
-            {howToPlay.title}
-          </h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {howToPlay.steps.map((step, index) => (
-              <div key={index} className="metric-card">
-                <div className="flex items-start gap-4">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black bg-[var(--accent-soft)] text-lg font-extrabold text-black">
-                    {index + 1}
-                  </span>
-                  <p className="pt-1 text-sm leading-7 text-[var(--muted)]">{step}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="space-y-4">
-          <section className="panel-card px-6 py-7">
-            <div className="section-eyebrow">Rules and timing</div>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
-              Know the round before you start
-            </h2>
-            <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{rules}</p>
-
-            <div className="mt-6 grid gap-3">
-              <CalendarDateCard puzzleKey={daily.puzzleKey} />
-              <NextGameCountdown />
-            </div>
-          </section>
-
-          <PlayerStatistics namespace={modeKey} />
-        </section>
-      </section>
-
-      <section className="app-frame px-6 py-6 md:px-8">
-        <div className="text-center">
-          <div className="section-eyebrow">Play other games</div>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--foreground)]">
-            More daily puzzle modes
-          </h2>
-        </div>
-
-        <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {otherModes.map((item) => (
-            <Link key={item.key} href={item.href} className="panel-card px-5 py-6 hover:-translate-y-1">
-              <div className="flex items-center justify-between gap-3">
-                <span className="rounded-lg bg-[var(--accent-cool-soft)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--foreground)]">
-                  {item.badge}
-                </span>
-                <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--muted)]">
-                  Open
-                </span>
-              </div>
-              <h3 className="mt-5 text-2xl font-extrabold tracking-tight text-[var(--foreground)]">
-                {item.label}
-              </h3>
-              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{item.description}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
-    </main>
+      <ModeExperience mode={mode} daily={daily} titles={titles} />
+    </>
   );
 }

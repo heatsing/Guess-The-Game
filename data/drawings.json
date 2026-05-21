@@ -1,0 +1,9 @@
+[
+  {
+    "id": "demo-bicycle",
+    "slug": "bicycle",
+    "title": "Bicycle",
+    "acceptableAnswers": ["bike", "bicycle"],
+    "images": ["/images/placeholder.svg", "/images/placeholder.svg", "/images/placeholder.svg"]
+  }
+]

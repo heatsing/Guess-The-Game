@@ -1,0 +1,9 @@
+[
+  {
+    "id": "demo-starry-night",
+    "slug": "starry-night",
+    "title": "Starry Night",
+    "acceptableAnswers": ["starry night", "the starry night"],
+    "images": ["/images/placeholder.svg"]
+  }
+]

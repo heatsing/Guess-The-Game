@@ -1,0 +1,9 @@
+[
+  {
+    "id": "demo-planet",
+    "slug": "planet",
+    "title": "Planet",
+    "acceptableAnswers": ["planet"],
+    "images": ["/images/placeholder.svg"]
+  }
+]

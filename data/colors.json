@@ -1,0 +1,9 @@
+[
+  {
+    "id": "demo-spectrum",
+    "slug": "spectrum-order",
+    "title": "Purple Blue Teal Green Yellow Red",
+    "acceptableAnswers": ["purple blue teal green yellow red", "violet blue teal green yellow red"],
+    "images": ["/images/placeholder.svg"]
+  }
+]
