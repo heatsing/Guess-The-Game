@@ -21,10 +21,10 @@ export default function SiteHeader() {
   return (
     <header className="site-header">
       <div className="site-header-inner">
-        <Link href="/" className="site-brand" aria-label="Guess Universe home">
-          <Image src="/logo.png" alt="Guess Universe logo" width={48} height={48} priority />
+        <Link href="/" className="site-brand" aria-label="Guess The Game home">
+          <Image src="/logo.png" alt="Guess The Game logo" width={48} height={48} priority />
           <span>
-            Guess <strong>Universe</strong>
+            Guess <strong>The Game</strong>
           </span>
         </Link>
 

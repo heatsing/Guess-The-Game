@@ -115,9 +115,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div>
               <Link href="/" className="site-brand">
                 <ImagePlaceholder />
-                <span>Guess <strong>Universe</strong></span>
+                <span>Guess <strong>The Game</strong></span>
               </Link>
-              <p>One universe. Daily guessing games across every category.</p>
+              <p>Daily guessing games across every category.</p>
             </div>
             <nav>
               <Link href="/">Daily Games</Link>

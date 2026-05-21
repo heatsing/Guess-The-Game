@@ -5,7 +5,7 @@ import { buildMetadata } from "@/lib/site";
 import { buildHomePageJsonLd } from "@/lib/structuredData";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Guess Universe: Daily guessing games",
+  title: "Guess The Game: Daily guessing games",
   description:
     "Play daily guessing games across images, books, movies, logos, colors, countries, words, songs, and more.",
   path: "/",
@@ -40,7 +40,7 @@ export default function HomePage() {
           </h1>
           <p>
             Guess games, books, movies, logos, animals, songs, colors, words, countries, and more
-            in one universe built for fast daily play.
+            in one daily game hub built for fast play.
           </p>
           <div className="hero-actions">
             <Link href="/game" className="primary-button">Play today's games</Link>
@@ -55,7 +55,7 @@ export default function HomePage() {
             <b>#1024</b>
           </div>
           <div className="featured-content">
-            <span className="mini-mark">{featured.badge}</span>
+            <span className="mini-mark" aria-hidden="true">{featured.icon}</span>
             <div>
               <h2>{featured.label}</h2>
               <p>{featured.description}</p>
@@ -76,7 +76,7 @@ export default function HomePage() {
         <div className="game-grid">
           {MODES.map((mode) => (
             <Link href={mode.href} key={mode.key} className={`game-tile mode-tone-${mode.accent}`}>
-              <span className="mode-mark">{mode.badge}</span>
+              <span className="mode-mark" aria-hidden="true">{mode.icon}</span>
               <h3>{mode.label}</h3>
               <p>{mode.description}</p>
               <div>

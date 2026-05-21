@@ -122,7 +122,7 @@ export default function ModeExperience({ mode, daily, titles = [] }: Props) {
       </div>
 
       <section className="mode-title-row">
-        <div className="mode-mark" aria-hidden="true">{mode.badge}</div>
+        <div className="mode-mark" aria-hidden="true">{mode.icon}</div>
         <div>
           <h1>{mode.label}</h1>
           <p>{mode.description}</p>
@@ -485,7 +485,7 @@ function RelatedGames({ modes }: { modes: Mode[] }) {
       <div className="related-grid">
         {modes.map((mode) => (
           <Link href={mode.href} key={mode.key}>
-            <span className={`mini-mark mode-tone-${mode.accent}`}>{mode.badge}</span>
+            <span className={`mini-mark mode-tone-${mode.accent}`} aria-hidden="true">{mode.icon}</span>
             <strong>{mode.label}</strong>
             <em>Play now</em>
           </Link>

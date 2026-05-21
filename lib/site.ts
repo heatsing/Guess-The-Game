@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
-export const SITE_NAME = "GuessTheGame";
+export const SITE_NAME = "Guess The Game";
 export const SITE_HOST = "guessthegame.net";
 export const SITE_URL = `https://${SITE_HOST}`;
 export const SITE_DESCRIPTION =
   "Play a clear daily image puzzle across games, books, movies, logos, and more. Study the clue stack, submit your guess, and come back for a fresh round every day.";
 export const SUPPORT_EMAIL = "guessthegameemail@gmail.com";
 export const SITE_KEYWORDS = [
-  "GuessTheGame",
+  "Guess The Game",
   "daily puzzle",
   "image guessing game",
   "guess the game",

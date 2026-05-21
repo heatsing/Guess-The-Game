@@ -3,6 +3,7 @@ export type Mode = {
   label: string;
   shortLabel: string;
   badge: string;
+  icon: string;
   href: string;
   description: string;
   accent: string;
@@ -15,6 +16,7 @@ export const MODES: Mode[] = [
     label: "Guess The Game",
     shortLabel: "Game",
     badge: "VG",
+    icon: "🎮",
     href: "/game",
     description: "Peel back six visual clues and name today's video game.",
     accent: "violet",
@@ -25,6 +27,7 @@ export const MODES: Mode[] = [
     label: "Guess The Book",
     shortLabel: "Book",
     badge: "BK",
+    icon: "📖",
     href: "/book",
     description: "Try to guess today's book in 6 guesses or less using covers, scenes, and story clues.",
     accent: "emerald",
@@ -35,6 +38,7 @@ export const MODES: Mode[] = [
     label: "Guess The Movie",
     shortLabel: "Movie",
     badge: "MV",
+    icon: "🎬",
     href: "/movie",
     description: "Frames, props, and posters from today's hidden film.",
     accent: "rose",
@@ -45,6 +49,7 @@ export const MODES: Mode[] = [
     label: "Guess The Logo",
     shortLabel: "Logo",
     badge: "LG",
+    icon: "⭐",
     href: "/logo",
     description: "Brand marks revealed from tight crops to full clarity.",
     accent: "amber",
@@ -55,6 +60,7 @@ export const MODES: Mode[] = [
     label: "Guess The House",
     shortLabel: "House",
     badge: "HS",
+    icon: "🏠",
     href: "/house",
     description: "Architecture and interiors from memorable homes and landmarks.",
     accent: "indigo",
@@ -65,6 +71,7 @@ export const MODES: Mode[] = [
     label: "Guess The Angle",
     shortLabel: "Angle",
     badge: "AG",
+    icon: "📐",
     href: "/angle",
     description: "Extreme close-ups and strange perspectives that reward observation.",
     accent: "teal",
@@ -75,6 +82,7 @@ export const MODES: Mode[] = [
     label: "Guess The Phrase",
     shortLabel: "Phrase",
     badge: "PH",
+    icon: "💬",
     href: "/phrase",
     description: "Visual riddles and rebus puzzles turned into a daily challenge.",
     accent: "pink",
@@ -85,6 +93,7 @@ export const MODES: Mode[] = [
     label: "Guess The Song",
     shortLabel: "Song",
     badge: "SG",
+    icon: "🎵",
     href: "/song",
     description: "Album art, lyric fragments, and music video clues for one track.",
     accent: "purple",
@@ -95,6 +104,7 @@ export const MODES: Mode[] = [
     label: "Guess The Animal",
     shortLabel: "Animal",
     badge: "AN",
+    icon: "🐾",
     href: "/animal",
     description: "Silhouettes, textures, and habitats that point to one animal.",
     accent: "orange",
@@ -105,6 +115,7 @@ export const MODES: Mode[] = [
     label: "Guess The Plant",
     shortLabel: "Plant",
     badge: "PL",
+    icon: "🌿",
     href: "/plant",
     description: "Leaves, flowers, and stems that reveal a single plant.",
     accent: "green",
@@ -115,6 +126,7 @@ export const MODES: Mode[] = [
     label: "Guess The Number",
     shortLabel: "Number",
     badge: "NM",
+    icon: "123",
     href: "/number",
     description: "Logic-driven rounds where each clue tightens the answer.",
     accent: "blue",
@@ -125,6 +137,7 @@ export const MODES: Mode[] = [
     label: "Guess The Price",
     shortLabel: "Price",
     badge: "PR",
+    icon: "🏷️",
     href: "/price",
     description: "Estimate the mystery price using visuals and a limited reveal budget.",
     accent: "yellow",
@@ -135,6 +148,7 @@ export const MODES: Mode[] = [
     label: "Guess The Colors",
     shortLabel: "Colors",
     badge: "CL",
+    icon: "🎨",
     href: "/colors",
     description: "Find the hidden color order using position feedback after each guess.",
     accent: "rainbow",
@@ -145,6 +159,7 @@ export const MODES: Mode[] = [
     label: "Guess The Country",
     shortLabel: "Country",
     badge: "CY",
+    icon: "🌐",
     href: "/country",
     description: "Identify a country from a blurred outline and geography clues.",
     accent: "violet",
@@ -155,6 +170,7 @@ export const MODES: Mode[] = [
     label: "Guess The Drawing",
     shortLabel: "Drawing",
     badge: "DR",
+    icon: "✏️",
     href: "/drawing",
     description: "A sketch sharpens over time. Guess what is being drawn.",
     accent: "indigo",
@@ -165,6 +181,7 @@ export const MODES: Mode[] = [
     label: "Guess The Emoji",
     shortLabel: "Emoji",
     badge: "EJ",
+    icon: "🙂",
     href: "/emoji",
     description: "Decode the emoji clue and submit the hidden phrase.",
     accent: "pink",
@@ -175,6 +192,7 @@ export const MODES: Mode[] = [
     label: "Guess The Flag",
     shortLabel: "Flag",
     badge: "FL",
+    icon: "🚩",
     href: "/flag",
     description: "Name the country from its flag and unlocked context clues.",
     accent: "blue",
@@ -185,6 +203,7 @@ export const MODES: Mode[] = [
     label: "Guess The Word",
     shortLabel: "Word",
     badge: "WD",
+    icon: "W",
     href: "/word",
     description: "Solve the six-letter word from tile feedback and word hints.",
     accent: "violet",
@@ -197,5 +216,5 @@ export function getModeBadge(modeKey: string): string {
 }
 
 export function getModeIcon(modeKey: string): string {
-  return getModeBadge(modeKey);
+  return MODES.find((mode) => mode.key === modeKey)?.icon ?? getModeBadge(modeKey);
 }
