@@ -7,6 +7,7 @@ import {
   SUPPORT_EMAIL,
   absoluteUrl,
 } from "@/lib/site";
+import { getModeSeo } from "@/lib/seo";
 
 export function buildSiteJsonLd() {
   return [
@@ -17,6 +18,11 @@ export function buildSiteJsonLd() {
       url: SITE_URL,
       description: SITE_DESCRIPTION,
       inLanguage: "en",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${SITE_URL}/?q={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
     },
     {
       "@context": "https://schema.org",
@@ -42,6 +48,7 @@ export function buildHomePageJsonLd(modes: Mode[]) {
     name: `${SITE_NAME} Daily Puzzle Modes`,
     description: SITE_DESCRIPTION,
     url: SITE_URL,
+    inLanguage: "en",
     isPartOf: {
       "@type": "WebSite",
       name: SITE_NAME,
@@ -78,13 +85,16 @@ export function buildFaqPageJsonLd(title: string, path: string, faqs: FaqEntry[]
 }
 
 export function buildModePageJsonLd(mode: Mode, description: string) {
+  const seo = getModeSeo(mode.key);
+
   return [
     {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      name: mode.label,
-      description,
+      name: seo.title,
+      description: seo.description,
       url: absoluteUrl(mode.href),
+      inLanguage: "en",
       isPartOf: {
         "@type": "WebSite",
         name: SITE_NAME,
@@ -93,7 +103,27 @@ export function buildModePageJsonLd(mode: Mode, description: string) {
       about: {
         "@type": "Thing",
         name: mode.label,
-        description,
+        description: mode.description,
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Game",
+      name: mode.label,
+      description: seo.description,
+      url: absoluteUrl(mode.href),
+      genre: ["Puzzle", "Trivia", mode.shortLabel],
+      gamePlatform: "Web browser",
+      isAccessibleForFree: true,
+      inLanguage: "en",
+      publisher: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: SITE_URL,
+      },
+      potentialAction: {
+        "@type": "PlayAction",
+        target: absoluteUrl(mode.href),
       },
     },
     {

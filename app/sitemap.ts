@@ -22,7 +22,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl(mode.href),
       lastModified: now,
       changeFrequency: "daily" as const,
-      priority: mode.key === "game" ? 0.95 : 0.8,
+      priority:
+        mode.key === "game"
+          ? 0.95
+          : mode.key === "flag" || mode.key === "country"
+            ? 0.9
+            : 0.8,
+      images: [absoluteUrl("/logo.png")],
     })),
   ];
 }

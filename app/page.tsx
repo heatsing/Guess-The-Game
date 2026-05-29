@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MODES } from "@/lib/modes";
+import { HOME_SEO } from "@/lib/seo";
 import { buildMetadata } from "@/lib/site";
 import { buildHomePageJsonLd } from "@/lib/structuredData";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Guess The Game: Daily guessing games",
-  description:
-    "Play daily guessing games across images, books, movies, logos, colors, countries, words, songs, and more.",
+  title: HOME_SEO.title,
+  description: HOME_SEO.description,
   path: "/",
-  keywords: ["daily game", "guessing game", "visual puzzle", "trivia game"],
+  keywords: HOME_SEO.keywords,
   siteNameInTitle: true,
 });
 
@@ -106,6 +106,22 @@ export default function HomePage() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="seo-copy-section" aria-labelledby="daily-puzzle-games">
+        <h2 id="daily-puzzle-games">Daily puzzle games on Guess The Game</h2>
+        <p>
+          Guess The Game is built for quick daily guessing games. You can play a classic video game
+          screenshot puzzle, a timed world flag quiz, a country map quiz, movie and book trivia,
+          logo recognition, word puzzles, music clues, animal and plant identification, color
+          sequence logic, and more from the same daily game hub.
+        </p>
+        <p>
+          Each mode is designed around a clear clue loop: inspect the prompt, make a guess, unlock
+          hints when needed, and come back for a fresh challenge. Geography players can practice
+          world flags and country silhouettes, trivia players can try movies, books, logos, and
+          songs, and word game fans can switch to number, phrase, emoji, and word puzzles.
+        </p>
       </section>
     </main>
   );

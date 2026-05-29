@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getModeFaqs } from "@/lib/faq";
+import { FAQ_SEO } from "@/lib/seo";
 import { buildMetadata } from "@/lib/site";
 import { buildFaqPageJsonLd } from "@/lib/structuredData";
 
 export const metadata: Metadata = buildMetadata({
-  title: "FAQ and answer rules",
-  description:
-    "Read the answer rules, daily reset timing, accepted guess policy, and core help topics for GuessTheGame.",
+  title: FAQ_SEO.title,
+  description: FAQ_SEO.description,
   path: "/faq",
-  keywords: ["faq", "answer rules", "accepted guesses", "daily reset"],
+  keywords: FAQ_SEO.keywords,
 });
 
 const FAQ_SUMMARY = [
@@ -29,7 +29,7 @@ const FAQ_SUMMARY = [
 
 export default function FAQPage() {
   const faqJsonLd = buildFaqPageJsonLd(
-    "GuessTheGame FAQ",
+    "Guess The Game FAQ",
     "/faq",
     getModeFaqs("game", "Guess The Game"),
   );

@@ -4,6 +4,7 @@ import { MODES } from "@/lib/modes";
 import { getDailyForModeSmart, isModeKey } from "@/lib/getDailyForMode";
 import ModePage from "@/components/ModePage";
 import { buildMetadata } from "@/lib/site";
+import { getModeSeo } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -20,12 +21,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const modeConfig = MODES.find((item) => item.key === mode)!;
+  const seo = getModeSeo(modeConfig.key);
 
   return buildMetadata({
-    title: modeConfig.label,
-    description: `${modeConfig.description} A fresh round appears every day at 00:00 UTC with local streak tracking on this device.`,
+    title: seo.title,
+    description: seo.description,
     path: modeConfig.href,
-    keywords: [modeConfig.label, modeConfig.shortLabel, "daily clue game", "image clues"],
+    keywords: seo.keywords,
+    siteNameInTitle: true,
   });
 }
 

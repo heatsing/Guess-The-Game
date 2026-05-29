@@ -4,15 +4,20 @@ export const SITE_NAME = "Guess The Game";
 export const SITE_HOST = "guessthegame.net";
 export const SITE_URL = `https://${SITE_HOST}`;
 export const SITE_DESCRIPTION =
-  "Play a clear daily image puzzle across games, books, movies, logos, and more. Study the clue stack, submit your guess, and come back for a fresh round every day.";
+  "Play Guess The Game every day with fast guessing games for video games, flags, countries, movies, books, logos, words, songs, animals, plants, colors, numbers, and more.";
 export const SUPPORT_EMAIL = "guessthegameemail@gmail.com";
 export const SITE_KEYWORDS = [
   "Guess The Game",
   "daily puzzle",
+  "daily guessing games",
   "image guessing game",
   "guess the game",
+  "guess the flag",
+  "guess the country",
   "guess the book",
   "guess the movie",
+  "guess the logo",
+  "geography quiz",
   "daily word game alternative",
   "visual trivia",
 ];
@@ -46,8 +51,23 @@ export function buildMetadata({
     title: siteNameInTitle ? pageTitle : title,
     description,
     keywords: [...SITE_KEYWORDS, ...keywords],
+    applicationName: SITE_NAME,
+    authors: [{ name: SITE_NAME, url: SITE_URL }],
+    creator: SITE_NAME,
+    publisher: SITE_NAME,
     alternates: {
       canonical: path,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
     openGraph: {
       title: pageTitle,

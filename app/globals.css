@@ -626,6 +626,26 @@ button:disabled {
   line-height: 1.5;
 }
 
+.seo-copy-section {
+  margin-top: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: rgba(15, 24, 42, 0.62);
+}
+
+.seo-copy-section h2 {
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-weight: 900;
+}
+
+.seo-copy-section p {
+  max-width: 76rem;
+  margin-top: 0.8rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
 .footer-logo-mark {
   display: grid;
   place-items: center;
